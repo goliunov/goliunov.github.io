@@ -38,7 +38,7 @@
   if (linkTelegram) {
     if (!isPlaceholder(CONFIG.telegramUrl)) {
       linkTelegram.href = CONFIG.telegramUrl;
-      linkTelegram.textContent = "Telegram";
+      linkTelegram.textContent = "Telegram @" + CONFIG.telegramUrl.split("/").pop();
       linkTelegram.hidden = false;
     }
   }
@@ -51,13 +51,9 @@
   }
 
   // ---------- References toggle ----------
-  var refList = document.getElementById("references-list");
-  var refFullCaption = document.getElementById("references-full-caption");
-  var refFallback = document.getElementById("references-fallback");
-  if (CONFIG.referencesEnabled) {
-    if (refList) refList.hidden = false;
-    if (refFullCaption) refFullCaption.hidden = false;
-    if (refFallback) refFallback.hidden = true;
+  var refSection = document.getElementById("references");
+  if (refSection && CONFIG.referencesEnabled) {
+    refSection.hidden = false;
   }
 
   // ---------- Contact form: Formspree with mailto fallback ----------

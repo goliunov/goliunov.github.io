@@ -72,14 +72,12 @@ submitting — so the form always works, even before Formspree is set up.
 ## References section
 
 Off by default (`referencesEnabled: false` in `config.js`). While off,
-the site shows a generic line instead of naming drivers:
-
-> References from drivers in Porsche Carrera Cup France and Benelux — on request.
+the whole "Drivers I've worked with" section is hidden.
 
 Set `referencesEnabled: true` **only after** Louis Perrot, Hjelte Hoffner
 and Anastasia Tereshchenko have confirmed they're fine being named
-publicly on the site. Once enabled, the full list with names/series
-appears instead.
+publicly on the site. Once enabled, the section with names/series
+appears between About and the final call to action.
 
 ## Deploy
 
