@@ -166,7 +166,6 @@ nav.main-nav a {
 }
 nav.main-nav a:hover { color: var(--text); }
 
-.header-cta { display: none; }
 
 .nav-toggle {
   display: inline-flex;
@@ -201,7 +200,6 @@ nav.main-nav a:hover { color: var(--text); }
 
 @media (min-width: 860px) {
   nav.main-nav { display: flex; }
-  .header-cta { display: inline-flex; }
   .nav-toggle { display: none; }
   .mobile-nav { display: none !important; }
 }
