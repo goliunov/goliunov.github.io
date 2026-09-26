@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aleksander Goliunov — Physical Performance Coach for Racing Drivers</title>
 <meta name="description" content="Your car gets a setup sheet every session. Your body doesn't. Physical setup coaching for racing drivers — remote, biotensegrity-based, built around your car and your calendar.">
+<meta name="theme-color" content="#08110D">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
@@ -23,7 +24,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="styles.css">
 
@@ -37,7 +38,7 @@
 
 <header class="site-header">
   <div class="container header-inner">
-    <a href="#hero" class="logo">Aleksander <span>Goliunov</span></a>
+    <a href="#hero" class="logo"><span class="logo-plate" aria-hidden="true">AG</span>Aleksander Goliunov</a>
     <nav class="main-nav" aria-label="Primary">
       <a href="#approach">Approach</a>
       <a href="#services">Services</a>
@@ -64,13 +65,21 @@
   <section class="hero" id="hero">
     <div class="container"><div class="hero-content fade-in">
       <p class="eyebrow">Physical Performance Coach for Racing Drivers</p>
-      <h1>Your car gets a setup sheet every session. Your body doesn't.</h1>
+      <h1>Your car gets a setup sheet every session. <span class="hl">Your body doesn't.</span></h1>
       <p class="hero-sub">I build the physical setup for the driver — the part of the lap time the car can't fix.</p>
       <div class="hero-ctas">
         <a href="#contact" class="btn btn-primary">Book a free 15-min assessment</a>
         <a href="#services" class="btn btn-secondary">How it works</a>
       </div>
     </div></div>
+    <div class="container">
+      <ul class="timing-strip" aria-label="Key facts">
+        <li><span>Daily</span>10–15 min</li>
+        <li><span>Kit</span>No equipment</li>
+        <li><span>Format</span>Remote by default</li>
+        <li><span>Start</span>Free 15-min assessment</li>
+      </ul>
+    </div>
   </section>
 
   <!-- Check your own data -->
@@ -78,22 +87,34 @@
     <div class="container">
       <div class="data-block fade-in">
         <div>
+          <p class="kicker">S1 · Telemetry</p>
           <h2>Check your own data</h2>
           <p>Take any driver's lap times over a long race — first stint against last. Part of that drop isn't tyres, fuel or track. It's the driver. That's where I work.</p>
         </div>
         <div class="data-chart">
           <svg viewBox="0 0 320 180" role="img" aria-label="Schematic chart showing lap times drifting slower across stints as a driver fatigues, with no numeric values">
-            <line x1="40" y1="20" x2="40" y2="150" stroke="#2A2D34" stroke-width="1"/>
-            <line x1="40" y1="150" x2="300" y2="150" stroke="#2A2D34" stroke-width="1"/>
-            <text x="18" y="30" transform="rotate(-90 18 30)" class="chart-text" fill="#A3A8B2" font-family="JetBrains Mono, monospace" font-size="10">SLOWER</text>
-            <polyline points="50,122 110,116 170,104 230,86 280,58" fill="none" stroke="#2A2D34" stroke-width="10" stroke-linecap="round" opacity="0.4"/>
-            <polyline points="50,122 110,116 170,104 230,86 280,58" fill="none" stroke="#E10600" stroke-width="2.5" stroke-linecap="round"/>
-            <circle cx="50" cy="122" r="4" fill="#F2F3F5"/>
-            <circle cx="280" cy="58" r="4" fill="#E10600"/>
-            <line x1="50" y1="122" x2="280" y2="122" stroke="#A3A8B2" stroke-width="1" stroke-dasharray="3 3"/>
-            <text x="50" y="168" fill="#A3A8B2" font-family="JetBrains Mono, monospace" font-size="10">STINT 1</text>
-            <text x="250" y="168" fill="#A3A8B2" font-family="JetBrains Mono, monospace" font-size="10">STINT 4</text>
-            <text x="290" y="90" fill="#E10600" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end">GAP</text>
+            <defs>
+              <linearGradient id="gapFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#1E8A5A" stop-opacity="0.45"/>
+                <stop offset="1" stop-color="#1E8A5A" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <g stroke="#1E3A2C" stroke-width="1">
+              <line x1="40" y1="45" x2="300" y2="45"/>
+              <line x1="40" y1="80" x2="300" y2="80"/>
+              <line x1="40" y1="115" x2="300" y2="115"/>
+            </g>
+            <line x1="40" y1="20" x2="40" y2="150" stroke="#2C4D3C" stroke-width="1"/>
+            <line x1="40" y1="150" x2="300" y2="150" stroke="#2C4D3C" stroke-width="1"/>
+            <text x="18" y="30" transform="rotate(-90 18 30)" fill="#A9B8AF" font-family="JetBrains Mono, monospace" font-size="10">SLOWER</text>
+            <polygon points="50,122 110,116 170,104 230,86 280,58 280,122" fill="url(#gapFill)"/>
+            <line x1="50" y1="122" x2="280" y2="122" stroke="#A9B8AF" stroke-width="1" stroke-dasharray="3 3"/>
+            <polyline points="50,122 110,116 170,104 230,86 280,58" fill="none" stroke="#F5C518" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="50" cy="122" r="4" fill="#F2EEE3"/>
+            <circle cx="280" cy="58" r="4.5" fill="#F5C518"/>
+            <text x="50" y="168" fill="#A9B8AF" font-family="JetBrains Mono, monospace" font-size="10">STINT 1</text>
+            <text x="250" y="168" fill="#A9B8AF" font-family="JetBrains Mono, monospace" font-size="10">STINT 4</text>
+            <text x="292" y="95" fill="#F5C518" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end">GAP</text>
           </svg>
           <p class="data-chart-caption">Schematic only — no real lap data, axes intentionally unlabeled.</p>
         </div>
@@ -104,17 +125,21 @@
   <!-- Where drivers lose time -->
   <section id="lose-time">
     <div class="container fade-in">
+      <p class="kicker">S2 · Time loss</p>
       <h2>Where drivers lose time</h2>
       <div class="card-grid">
         <div class="card">
+          <span class="card-index">A</span>
           <h3>Neck &amp; core fade</h3>
           <p>Late in a stint, braking and turn-in get less consistent.</p>
         </div>
         <div class="card">
+          <span class="card-index">B</span>
           <h3>Heat, night, altitude, travel</h3>
           <p>They break down recovery between stints and between rounds.</p>
         </div>
         <div class="card">
+          <span class="card-index">C</span>
           <h3>Old injuries &amp; one-sided load</h3>
           <p>Compensations build up and cost precision.</p>
         </div>
@@ -127,6 +152,7 @@
     <div class="container">
       <div class="approach-grid fade-in">
         <div>
+          <p class="kicker">S3 · Method</p>
           <h2>Built like a chassis, not a set of muscles</h2>
           <p>I use biotensegrity — the body treated as one tension structure. Short daily routines, no equipment, hotel-room friendly. Built around each driver's body, car and calendar, and designed to sit alongside their gym work and team physio — not replace them.</p>
         </div>
@@ -142,6 +168,7 @@
   <!-- How we work together -->
   <section id="services">
     <div class="container fade-in">
+      <p class="kicker">S4 · Programme</p>
       <h2>How we work together</h2>
       <div class="steps-grid">
         <div class="step-card">
@@ -172,6 +199,7 @@
   <!-- Who I work with -->
   <section id="audience">
     <div class="container fade-in">
+      <p class="kicker">S5 · Grid</p>
       <h2>Who I work with</h2>
       <div class="audience-grid">
         <div class="audience-card">
@@ -203,6 +231,7 @@
           <img class="about-photo" src="assets/img/about.jpg" alt="Portrait of Aleksander Goliunov" width="600" height="600" loading="lazy" decoding="async">
         </picture>
         <div>
+          <p class="kicker">S6 · Coach</p>
           <h2>About me</h2>
           <p>I'm Aleksander Goliunov, a movement therapist and Pilates coach specialising in biotensegrity. I work with racing drivers remotely, and I'm a car person myself — I think about the body the way engineers think about a chassis: load paths, stiffness, balance.</p>
           <div class="tags">
@@ -235,6 +264,7 @@
   <!-- Final CTA -->
   <section class="final-cta" id="cta">
     <div class="container fade-in">
+      <p class="kicker">Box, box</p>
       <h2>Easiest way to see if it's worth anything</h2>
       <p>A free 15-minute video assessment. No commitment, no equipment needed.</p>
       <a href="#contact" class="btn btn-primary">Book a free assessment</a>
@@ -244,6 +274,7 @@
   <!-- Contact -->
   <section id="contact">
     <div class="container">
+      <p class="kicker">Team radio</p>
       <h2>Contact</h2>
       <div class="contact-grid fade-in">
         <div class="contact-links" id="contact-links">

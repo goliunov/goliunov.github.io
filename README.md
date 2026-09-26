@@ -43,8 +43,9 @@ python -m http.server 8080
 - **OG / share image** — `assets/og.jpg` (1200×630). Regenerate it with
   your own design once you have real photos/branding.
 - **Colors / fonts** — CSS variables at the top of `styles.css` (`:root`).
-  There's a reserved `--accent-2` (pink, from Instagram) that isn't used
-  anywhere by default — set it as an accent somewhere if you want it.
+  Palette: British racing green (`--brg`, `--brg-deep`, `--brg-bright`),
+  ivory text (`--text`) and signal yellow (`--accent`, CTAs only).
+  Headings use Archivo (expanded width), labels JetBrains Mono.
 
 ## Placeholders (`config.js`)
 
