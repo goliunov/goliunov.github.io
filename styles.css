@@ -452,7 +452,7 @@ form#contact-form { display: flex; flex-direction: column; gap: 14px; }
   border-radius: 8px;
   color: var(--text);
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 16px; /* <16px makes iOS Safari zoom in on focus */
   padding: 12px;
   min-height: 44px;
 }
