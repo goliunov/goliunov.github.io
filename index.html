@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aleksander Goliunov — Physical Performance Coach for Racing Drivers</title>
+<meta name="description" content="Your car gets a setup sheet every session. Your body doesn't. Physical setup coaching for racing drivers — remote, biotensegrity-based, built around your car and your calendar.">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Aleksander Goliunov — Physical Performance Coach for Racing Drivers">
+<meta property="og:description" content="Your car gets a setup sheet every session. Your body doesn't. I build the physical setup for the driver — the part of the lap time the car can't fix.">
+<meta property="og:image" content="assets/og.jpg">
+<meta property="og:url" content="https://goliunov.com/">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Aleksander Goliunov — Physical Performance Coach for Racing Drivers">
+<meta name="twitter:description" content="Your car gets a setup sheet every session. Your body doesn't.">
+<meta name="twitter:image" content="assets/og.jpg">
+
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+
+<!--
+  Analytics is off by default (no cookies, no third-party scripts).
+  To enable Plausible, uncomment and set data-domain:
+  <script defer data-domain="goliunov.com" src="https://plausible.io/js/script.js"></script>
+-->
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="#hero" class="logo">Aleksander <span>Goliunov</span></a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="#approach">Approach</a>
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a href="#contact" class="btn btn-primary header-cta">Book free assessment</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+        <path d="M2 4H16M2 9H16M2 14H16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile">
+    <a href="#approach">Approach</a>
+    <a href="#services">Services</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a href="#contact" class="btn btn-primary" style="margin-top:8px;">Book free assessment</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="container hero-content fade-in">
+      <p class="eyebrow">Physical Performance Coach for Racing Drivers</p>
+      <h1>Your car gets a setup sheet every session. Your body doesn't.</h1>
+      <p class="hero-sub">I build the physical setup for the driver — the part of the lap time the car can't fix.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn-primary">Book a free 15-min assessment</a>
+        <a href="#services" class="btn btn-secondary">How it works</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Check your own data -->
+  <section id="check-data">
+    <div class="container">
+      <div class="data-block fade-in">
+        <div>
+          <h2>Check your own data</h2>
+          <p>Take any driver's lap times over a long race — first stint against last. Part of that drop isn't tyres, fuel or track. It's the driver. That's where I work.</p>
+        </div>
+        <div class="data-chart">
+          <svg viewBox="0 0 320 180" role="img" aria-label="Schematic chart showing lap times drifting slower across stints as a driver fatigues, with no numeric values">
+            <line x1="40" y1="20" x2="40" y2="150" stroke="#2A2D34" stroke-width="1"/>
+            <line x1="40" y1="150" x2="300" y2="150" stroke="#2A2D34" stroke-width="1"/>
+            <text x="18" y="30" transform="rotate(-90 18 30)" class="chart-text" fill="#A3A8B2" font-family="JetBrains Mono, monospace" font-size="10">SLOWER</text>
+            <polyline points="50,122 110,116 170,104 230,86 280,58" fill="none" stroke="#2A2D34" stroke-width="10" stroke-linecap="round" opacity="0.4"/>
+            <polyline points="50,122 110,116 170,104 230,86 280,58" fill="none" stroke="#E10600" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="50" cy="122" r="4" fill="#F2F3F5"/>
+            <circle cx="280" cy="58" r="4" fill="#E10600"/>
+            <line x1="50" y1="122" x2="280" y2="122" stroke="#A3A8B2" stroke-width="1" stroke-dasharray="3 3"/>
+            <text x="50" y="168" fill="#A3A8B2" font-family="JetBrains Mono, monospace" font-size="10">STINT 1</text>
+            <text x="250" y="168" fill="#A3A8B2" font-family="JetBrains Mono, monospace" font-size="10">STINT 4</text>
+            <text x="290" y="90" fill="#E10600" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="end">GAP</text>
+          </svg>
+          <p class="data-chart-caption">Schematic only — no real lap data, axes intentionally unlabeled.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Where drivers lose time -->
+  <section id="lose-time">
+    <div class="container fade-in">
+      <h2>Where drivers lose time</h2>
+      <div class="card-grid">
+        <div class="card">
+          <h3>Neck &amp; core fade</h3>
+          <p>Late in a stint, braking and turn-in get less consistent.</p>
+        </div>
+        <div class="card">
+          <h3>Heat, night, altitude, travel</h3>
+          <p>They break down recovery between stints and between rounds.</p>
+        </div>
+        <div class="card">
+          <h3>Old injuries &amp; one-sided load</h3>
+          <p>Compensations build up and cost precision.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The approach -->
+  <section id="approach">
+    <div class="container">
+      <div class="approach-grid fade-in">
+        <div>
+          <h2>Built like a chassis, not a set of muscles</h2>
+          <p>I use biotensegrity — the body treated as one tension structure. Short daily routines, no equipment, hotel-room friendly. Built around each driver's body, car and calendar, and designed to sit alongside their gym work and team physio — not replace them.</p>
+        </div>
+        <ul class="checklist">
+          <li>10–15 minutes a day</li>
+          <li>No equipment — works in a hotel room or the paddock</li>
+          <li>Fits around your trainer, your physio and your race calendar</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- How we work together -->
+  <section id="services">
+    <div class="container fade-in">
+      <h2>How we work together</h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-number">01</span>
+          <h3>Driver assessment</h3>
+          <p>15-minute video check. Free.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-number">02</span>
+          <h3>Race prep</h3>
+          <p>Up to 8 weeks before a specific event. Remote, fixed scope.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-number">03</span>
+          <h3>Season programme</h3>
+          <p>Ongoing setup and follow-up between rounds.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-number">04</span>
+          <h3>Trackside</h3>
+          <p>On-site support at events.</p>
+        </div>
+      </div>
+      <p class="steps-note">All programmes are remote by default. Pricing on request.</p>
+    </div>
+  </section>
+
+  <!-- Who I work with -->
+  <section id="audience">
+    <div class="container fade-in">
+      <h2>Who I work with</h2>
+      <div class="audience-grid">
+        <div class="audience-card">
+          <h3>Pro drivers</h3>
+          <p>Endurance, GT and one-make cups. The work that keeps going between race weekends, when the home trainer and the machines are far away.</p>
+        </div>
+        <div class="audience-card">
+          <h3>Gentleman drivers</h3>
+          <p>Demanding day jobs, limited training time, bodies shaped by desk work. The biggest gains per hour invested.</p>
+        </div>
+        <div class="audience-card">
+          <h3>Teams</h3>
+          <p>Physical prep for your drivers and your seat customers, without adding anything to your raceday operation.</p>
+        </div>
+        <div class="audience-card">
+          <h3>Driver coaches</h3>
+          <p>You fix the technique, I fix the physical limit behind it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid fade-in">
+        <picture>
+          <source srcset="assets/img/about.webp" type="image/webp">
+          <img class="about-photo" src="assets/img/about.jpg" alt="Portrait of Aleksander Goliunov" width="923" height="920" loading="lazy" decoding="async">
+        </picture>
+        <div>
+          <h2>About me</h2>
+          <p>I'm Aleksander Goliunov, a movement therapist and Pilates coach specialising in biotensegrity. I work with racing drivers remotely, and I'm a car person myself — I think about the body the way engineers think about a chassis: load paths, stiffness, balance.</p>
+          <div class="tags">
+            <span class="tag">Biotensegrity</span>
+            <span class="tag">Anatomy Trains</span>
+            <span class="tag">DNS</span>
+            <span class="tag">Polestar Pilates</span>
+            <span class="tag">Franklin Method</span>
+            <span class="tag">Thirst4Function Biomechanics</span>
+            <span class="tag">Slings in Motion</span>
+            <span class="tag">Life Fitness Functional Training</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- References -->
+  <section id="references">
+    <div class="container fade-in">
+      <h2>Drivers I've worked with</h2>
+
+      <ul class="references-list" id="references-list" hidden>
+        <li><b>Louis Perrot</b> — Porsche Carrera Cup France</li>
+        <li><b>Hjelte Hoffner</b> — Porsche Carrera Cup Benelux / Supercup</li>
+        <li><b>Anastasia Tereshchenko</b> — racing driver</li>
+      </ul>
+      <p class="references-caption" id="references-full-caption" hidden><em>References available on request.</em></p>
+
+      <p class="references-caption" id="references-fallback">References from drivers in Porsche Carrera Cup France and Benelux — on request.</p>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="final-cta" id="cta">
+    <div class="container fade-in">
+      <h2>Easiest way to see if it's worth anything</h2>
+      <p>A free 15-minute video assessment. No commitment, no equipment needed.</p>
+      <a href="#contact" class="btn btn-primary">Book a free assessment</a>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container">
+      <h2>Contact</h2>
+      <div class="contact-grid fade-in">
+        <div class="contact-links" id="contact-links">
+          <a id="link-email" href="#">Email</a>
+          <a id="link-instagram" href="#" target="_blank" rel="noopener">Instagram</a>
+          <a id="link-telegram" href="#" target="_blank" rel="noopener" hidden>Telegram</a>
+          <a id="link-phone" href="#" target="_blank" rel="noopener" hidden>WhatsApp / Phone</a>
+        </div>
+
+        <form id="contact-form">
+          <div class="form-row">
+            <label for="f-name">Name</label>
+            <input type="text" id="f-name" name="name" required>
+          </div>
+          <div class="form-row">
+            <label for="f-email">Email</label>
+            <input type="email" id="f-email" name="email" required>
+          </div>
+          <div class="form-row">
+            <label for="f-role">I am a…</label>
+            <select id="f-role" name="role">
+              <option value="Driver">Driver</option>
+              <option value="Team">Team</option>
+              <option value="Coach">Coach</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="f-series">Series / championship (optional)</label>
+            <input type="text" id="f-series" name="series">
+          </div>
+          <div class="form-row">
+            <label for="f-message">Message</label>
+            <textarea id="f-message" name="message" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Send</button>
+          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>© 2026 Aleksander Goliunov · Movement Therapist — Biotensegrity Specialist · Remote worldwide</p>
+  </div>
+</footer>
+
+<script src="config.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
