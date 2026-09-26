@@ -86,7 +86,7 @@ h1 {
   text-transform: uppercase;
   letter-spacing: -0.01em;
 }
-h1 .hl { color: var(--accent); }
+h1 .hl, h2 .hl { color: var(--accent); }
 
 h2 {
   font-size: clamp(24px, 4vw, 40px);
@@ -379,7 +379,7 @@ nav.main-nav a:hover::after { transform: scaleX(1); }
   align-items: center;
 }
 @media (min-width: 760px) {
-  .data-block { grid-template-columns: 1fr 1.05fr; gap: 56px; }
+  .data-block { grid-template-columns: 1.1fr 1fr; gap: 56px; }
 }
 .data-chart {
   background: var(--surface);
