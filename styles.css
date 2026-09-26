@@ -365,10 +365,11 @@ nav.main-nav a:hover { color: var(--text); }
   align-items: center;
 }
 @media (min-width: 760px) {
-  .about-grid { grid-template-columns: 0.8fr 1.2fr; }
+  .about-grid { grid-template-columns: 260px 1fr; gap: 48px; }
 }
 .about-photo {
   width: 100%;
+  max-width: 220px;
   height: auto;
   aspect-ratio: 4 / 5;
   object-fit: cover;
@@ -510,4 +511,7 @@ textarea:focus-visible {
   overflow: hidden;
   clip: rect(0 0 0 0);
   white-space: nowrap;
+}
+@media (min-width: 760px) {
+  .about-photo { max-width: 260px; }
 }
