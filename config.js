@@ -16,6 +16,9 @@ const CONFIG = {
   // Optional. Leave empty to hide. International format, e.g. "+995000000000"
   phone: "",
 
+  // Google Calendar appointment schedule (free 15-min assessment booking page)
+  bookingUrl: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ383UxpqKadgN1AaYDzJxQbkdTHE_GL1ytrCJ_kE5Tmq9sQW25Mq96tGyLmtQ8T4IsjPv69hDuQ",
+
   // Formspree form id, e.g. "myyaabbc" -> https://formspree.io/f/myyaabbc
   formspreeId: "xkjgqyev",
 

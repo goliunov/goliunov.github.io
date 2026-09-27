@@ -50,6 +50,16 @@
     }
   }
 
+  // ---------- Booking buttons -> Google Calendar booking page ----------
+  if (!isPlaceholder(CONFIG.bookingUrl)) {
+    document.querySelectorAll("[data-booking]").forEach(function (a) {
+      a.href = CONFIG.bookingUrl;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.hidden = false;
+    });
+  }
+
   // ---------- References toggle ----------
   var refSection = document.getElementById("references");
   if (refSection && CONFIG.referencesEnabled) {

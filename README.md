@@ -58,6 +58,15 @@ format, e.g. `+995500000000`, to show a WhatsApp link.
 Until these are filled in, the corresponding link/feature is hidden
 automatically — nothing broken shows up on the live site.
 
+## Booking (Google Calendar)
+
+"Book a free assessment" buttons open a Google Calendar appointment
+schedule ("Free 15-min driver assessment": weekdays 07:00–22:00 Tbilisi,
+booked at least 12 h ahead, Google Meet link created automatically).
+The link lives in `config.js` as `bookingUrl`; availability is edited in
+Google Calendar → Booking pages. Empty `bookingUrl` = buttons scroll to
+the contact form instead.
+
 ## Contact form (Formspree)
 
 1. Create a form at [formspree.io](https://formspree.io) (free tier is
