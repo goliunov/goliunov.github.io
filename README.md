@@ -117,6 +117,12 @@ appears between About and the final call to action.
   if using a subdomain like `www`.
 - Either way, allow up to 24h for DNS + HTTPS certificate to propagate.
 
+## Cache busting
+
+`index.html` loads `styles.css`, `config.js` and `main.js` with `?v=YYYYMMDD`.
+Bump that value after changing any of them, otherwise visitors may see the
+old file for up to 10 minutes (GitHub Pages cache).
+
 ## Analytics
 
 Off by default — no cookies, no tracking script. There's a commented-out
