@@ -625,6 +625,27 @@ nav.main-nav a:hover::after { transform: scaleX(1); }
 .final-cta h2 { max-width: 780px; margin-left: auto; margin-right: auto; }
 .final-cta p { color: #D3DDD7; }
 .final-cta .btn { margin-top: 14px; }
+.final-cta .btn-secondary { border-color: rgba(242, 238, 227, 0.4); }
+
+/* Google Calendar booking widget (white by design, framed like a setup sheet) */
+.booking-frame {
+  max-width: 1000px;
+  margin: 28px auto 8px;
+  background: #fff;
+  border-radius: var(--radius);
+  border-top: 4px solid var(--accent);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+.booking-frame iframe {
+  display: block;
+  width: 100%;
+  height: 900px;
+  border: 0;
+}
+@media (min-width: 760px) {
+  .booking-frame iframe { height: 700px; }
+}
 
 /* ---------- Contact ---------- */
 

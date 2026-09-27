@@ -68,7 +68,7 @@
       <h1>Your car gets a setup sheet every session. <span class="hl">Your body doesn't.</span></h1>
       <p class="hero-sub">I build the physical setup for the driver — the part of the lap time the car can't fix.</p>
       <div class="hero-ctas">
-        <a href="#contact" class="btn btn-primary" data-booking>Book a free 15-min assessment</a>
+        <a href="#book" class="btn btn-primary" data-booking>Book a free 15-min assessment</a>
         <a href="#services" class="btn btn-secondary">How it works</a>
       </div>
     </div></div>
@@ -261,13 +261,16 @@
     </div>
   </section>
 
-  <!-- Final CTA -->
-  <section class="final-cta" id="cta">
+  <!-- Final CTA + booking calendar -->
+  <section class="final-cta" id="book">
     <div class="container fade-in">
       <p class="kicker">Box, box</p>
       <h2>Easiest way to see if it's worth anything</h2>
-      <p>A free 15-minute video assessment. No commitment, no equipment needed.</p>
-      <a href="#contact" class="btn btn-primary" data-booking>Book a free assessment</a>
+      <p>A free 15-minute video assessment. No commitment, no equipment needed. Pick a time below — the Google Meet link comes to your inbox.</p>
+      <div class="booking-frame" id="booking-frame" hidden>
+        <iframe id="booking-iframe" title="Book a free 15-minute assessment" loading="lazy"></iframe>
+      </div>
+      <a href="#contact" class="btn btn-primary" id="booking-fallback">Send a message instead</a>
     </div>
   </section>
 
@@ -278,7 +281,7 @@
       <h2>Contact</h2>
       <div class="contact-grid fade-in">
         <div class="contact-links" id="contact-links">
-          <a id="link-booking" href="#" data-booking hidden>Book a 15-min video call</a>
+          <a id="link-booking" href="#book" data-booking>Book a 15-min video call</a>
           <a id="link-email" href="#">Email</a>
           <a id="link-instagram" href="#" target="_blank" rel="noopener">Instagram</a>
           <a id="link-telegram" href="#" target="_blank" rel="noopener" hidden>Telegram</a>

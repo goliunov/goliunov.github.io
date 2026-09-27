@@ -60,7 +60,7 @@ automatically — nothing broken shows up on the live site.
 
 ## Booking (Google Calendar)
 
-"Book a free assessment" buttons open a Google Calendar appointment
+"Book" buttons scroll to an embedded Google Calendar appointment
 schedule ("Free 15-min driver assessment": weekdays 07:00–22:00 Tbilisi,
 booked at least 12 h ahead, Google Meet link created automatically).
 The link lives in `config.js` as `bookingUrl`; availability is edited in
