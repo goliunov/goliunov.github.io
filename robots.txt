@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://goliunov.github.io/sitemap.xml
