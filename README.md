@@ -123,6 +123,14 @@ appears between About and the final call to action.
 Bump that value after changing any of them, otherwise visitors may see the
 old file for up to 10 minutes (GitHub Pages cache).
 
+## Notes (articles)
+
+`/notes/` holds articles adapted from the Instagram carousels. Content lives
+in `tools/build_notes.py` (the `ARTICLES` list). After editing it run
+`python tools/build_notes.py` — it rewrites `notes/**/index.html` and
+`sitemap.xml`. The "Notes from the paddock" block on the home page lists the
+three latest by hand.
+
 ## Google Search
 
 The site is registered in Google Search Console (account macheterezhet@gmail.com,
