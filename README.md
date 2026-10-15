@@ -123,6 +123,13 @@ appears between About and the final call to action.
 Bump that value after changing any of them, otherwise visitors may see the
 old file for up to 10 minutes (GitHub Pages cache).
 
+## Google Search
+
+The site is registered in Google Search Console (account macheterezhet@gmail.com,
+property `https://goliunov.github.io/`). **Do not delete
+`google8276132e454cccdb.html`** — it proves ownership. `sitemap.xml` is
+submitted there; update its `<lastmod>` when the content changes a lot.
+
 ## Analytics
 
 Off by default — no cookies, no tracking script. There's a commented-out
