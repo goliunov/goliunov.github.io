@@ -25,6 +25,7 @@
   var linkEmail = document.getElementById("link-email");
   var linkInstagram = document.getElementById("link-instagram");
   var linkTelegram = document.getElementById("link-telegram");
+  var linkLinkedin = document.getElementById("link-linkedin");
   var linkPhone = document.getElementById("link-phone");
 
   if (linkEmail && CONFIG.email) {
@@ -34,6 +35,11 @@
   if (linkInstagram && CONFIG.instagramUrl) {
     linkInstagram.href = CONFIG.instagramUrl;
     linkInstagram.textContent = "Instagram " + CONFIG.instagramHandle;
+  }
+  if (linkLinkedin && !isPlaceholder(CONFIG.linkedinUrl)) {
+    linkLinkedin.href = CONFIG.linkedinUrl;
+    linkLinkedin.textContent = "LinkedIn";
+    linkLinkedin.hidden = false;
   }
   if (linkTelegram) {
     if (!isPlaceholder(CONFIG.telegramUrl)) {

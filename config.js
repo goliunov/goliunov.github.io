@@ -13,6 +13,8 @@ const CONFIG = {
 
   telegramUrl: "https://t.me/goliunov",
 
+  linkedinUrl: "https://www.linkedin.com/in/aleksandergoliunov",
+
   // Optional. Leave empty to hide. International format, e.g. "+995000000000"
   phone: "",
 

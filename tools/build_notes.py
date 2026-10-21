@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://goliunov.github.io"
-ASSET_V = "20261015"
+ASSET_V = "20261021"
 IG = "https://www.instagram.com/a.goliunov/p/"
 
 # Each section: (heading or None, [blocks]); a block is a paragraph string or a list (bullets).
