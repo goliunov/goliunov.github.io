@@ -131,6 +131,21 @@ in `tools/build_notes.py` (the `ARTICLES` list). After editing it run
 `sitemap.xml`. The "Notes from the paddock" block on the home page lists the
 three latest by hand.
 
+## Reaction test (/reaction/)
+
+F1-style start game: five red lights (1 s apart), random 0.2–3 s hold, then
+all green. Code: `reaction/index.html`, `reaction.js`, styles in `styles.css`.
+
+Leaderboard backend is a Google Apps Script web app bound to the Google Sheet
+"Reaction leaderboard (goliunov.github.io)" in macheterezhet@gmail.com
+(source copy: `tools/reaction_leaderboard.gs`). Its URL is `reactionApi` in
+`config.js`. Weekly board resets Monday 00:00 UTC; best time per name.
+
+Moderation: open the sheet → tab "Results" → delete rows (bad names,
+suspicious times). Times outside 100–1500 ms are rejected by the script.
+If you edit the script: Deploy → Manage deployments → edit → New version
+(keeps the same URL).
+
 ## Google Search
 
 The site is registered in Google Search Console (account macheterezhet@gmail.com,

@@ -22,7 +22,7 @@ const CONFIG = {
   bookingUrl: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ383UxpqKadgN1AaYDzJxQbkdTHE_GL1ytrCJ_kE5Tmq9sQW25Mq96tGyLmtQ8T4IsjPv69hDuQ",
 
   // Reaction test leaderboard: Google Apps Script web app URL (see README)
-  reactionApi: "[REACTION_API]",
+  reactionApi: "https://script.google.com/macros/s/AKfycbzCBd3rjOstgjtI0Jlijx2n3cD-iQiVibX1E2KkBKiO8uTdvVyjLisZ6KhU1OJvpq-_/exec",
 
   // Formspree form id, e.g. "myyaabbc" -> https://formspree.io/f/myyaabbc
   formspreeId: "xkjgqyev",
