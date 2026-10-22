@@ -5,6 +5,15 @@
     return !value || /^\[.*\]$/.test(value.trim());
   }
 
+  // ---------- Reload starts at the top (not at the old scroll position) ----------
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  var navEntry = performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
+  if (navEntry && navEntry.type === "reload") {
+    if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+    window.scrollTo(0, 0);
+    window.addEventListener("load", function () { window.scrollTo(0, 0); });
+  }
+
   // ---------- Mobile nav ----------
   var navToggle = document.getElementById("nav-toggle");
   var mobileNav = document.getElementById("mobile-nav");
