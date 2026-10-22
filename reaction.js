@@ -316,8 +316,6 @@
     if (lastRank) { g.fillStyle = "#F5C518"; g.font = "800 64px Archivo, 'Arial Black', sans-serif"; g.fillText("#" + lastRank + " THIS WEEK", 540, 1230); }
     g.fillStyle = "#F2EEE3"; g.font = "900 96px Archivo, 'Arial Black', sans-serif";
     g.fillText("BEAT MY START", 540, 1470);
-    g.fillStyle = "#F5C518"; g.font = "500 44px 'JetBrains Mono', monospace";
-    g.fillText("goliunov.github.io/reaction", 540, 1570);
     g.fillStyle = "#F5C518"; g.fillRect(0, 1890, 1080, 30);
     return new Promise(function (res) { c.toBlob(res, "image/png"); });
   }
