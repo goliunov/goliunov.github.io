@@ -261,12 +261,38 @@
   tabWeek.addEventListener("click", function () { selectTab("week"); });
   tabAll.addEventListener("click", function () { selectTab("all"); });
 
-  function fetchBoard() {
+  // Google Apps Script sometimes takes 10–30 s: show the last board we saw right away,
+  // give each request 10 s and retry, keep the old board if every try fails
+  function setBoard(d) {
+    board = d;
+    if (d.weekStart !== weekStart(Date.now())) { board.week = []; board.weekRank = null; board.weekTotal = 0; }
+    render();
+  }
+  try {
+    var cachedBoard = JSON.parse(load("rx_board") || "null");
+    if (cachedBoard && cachedBoard.week) setBoard(cachedBoard);
+  } catch (e) {}
+
+  var boardReq = 0;
+  function fetchBoard(attempt) {
     if (!api) { render(); return; }
-    fetch(apiUrl(playerName))
+    attempt = attempt || 1;
+    var req = ++boardReq;
+    var timedOut = false;
+    var timer = setTimeout(function () { timedOut = true; retry(); }, 10000);
+    function retry() {
+      if (req !== boardReq) return;
+      if (attempt < 3) { fetchBoard(attempt + 1); return; }
+      if (!board) boardEl.innerHTML = '<li class="rx-empty">Leaderboard is slow right now. Refresh the page to try again.</li>';
+    }
+    fetch(apiUrl(playerName) + "&t=" + Date.now())
       .then(function (r) { return r.json(); })
-      .then(function (d) { if (d && d.week) { board = d; render(); } })
-      .catch(function () { boardEl.innerHTML = '<li class="rx-empty">Leaderboard unavailable right now.</li>'; });
+      .then(function (d) {
+        clearTimeout(timer);
+        if (d && d.week) { save("rx_board", JSON.stringify(d)); if (req === boardReq || !board) setBoard(d); }
+        else if (!timedOut) retry();
+      })
+      .catch(function () { clearTimeout(timer); if (!timedOut) retry(); });
   }
 
   function submit(ms) {
@@ -274,7 +300,7 @@
     fetch(api, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ name: playerName, ms: ms }) })
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        if (d && d.week) { board = d; lastRank = d.weekRank; render(); }
+        if (d && d.week) { save("rx_board", JSON.stringify(d)); boardReq++; setBoard(d); lastRank = d.weekRank; }
         if (d && d.ok && d.weekRank) statusEl.textContent += " You're #" + d.weekRank + " this week.";
       })
       .catch(function () {});
