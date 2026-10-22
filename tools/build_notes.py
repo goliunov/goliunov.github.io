@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://goliunov.github.io"
-ASSET_V = "20261021"
+ASSET_V = "20261022"
 IG = "https://www.instagram.com/a.goliunov/p/"
 
 # Each section: (heading or None, [blocks]); a block is a paragraph string or a list (bullets).
@@ -396,6 +396,7 @@ def head(title, description, url, extra=""):
       <a href="/#approach">Approach</a>
       <a href="/#services">Services</a>
       <a href="/notes/">Notes</a>
+      <a href="/reaction/">Reaction</a>
       <a href="/#about">About</a>
       <a href="/#contact">Contact</a>
     </nav>
@@ -409,6 +410,7 @@ def head(title, description, url, extra=""):
     <a href="/#approach">Approach</a>
     <a href="/#services">Services</a>
     <a href="/notes/">Notes</a>
+    <a href="/reaction/">Reaction</a>
     <a href="/#about">About</a>
     <a href="/#contact">Contact</a>
   </nav>
@@ -527,7 +529,7 @@ def build_index(articles):
 
 
 def build_sitemap(articles):
-    urls = [(SITE + "/", articles[0]["date"]), (SITE + "/notes/", articles[0]["date"])]
+    urls = [(SITE + "/", articles[0]["date"]), (SITE + "/reaction/", "2026-10-22"), (SITE + "/notes/", articles[0]["date"])]
     urls += [(f"{SITE}/notes/{a['slug']}/", a["date"]) for a in articles]
     rows = "".join(f"  <url>\n    <loc>{u}</loc>\n    <lastmod>{d}</lastmod>\n  </url>\n" for u, d in urls)
     return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{rows}</urlset>\n'

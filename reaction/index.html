@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reaction Test — five red, then green | Aleksander Goliunov</title>
+<meta name="description" content="Race-start reaction test: five red lights, then green. Tap as fast as you can, beat this week's leaderboard and challenge your friends.">
+<meta name="theme-color" content="#08110D">
+<link rel="canonical" href="https://goliunov.github.io/reaction/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Reaction Test — can you beat my start?">
+<meta property="og:description" content="Five red lights, then green. Tap as fast as you can and get on this week's leaderboard.">
+<meta property="og:image" content="https://goliunov.github.io/assets/og-reaction.jpg">
+<meta property="og:url" content="https://goliunov.github.io/reaction/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://goliunov.github.io/assets/og-reaction.jpg">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=20261022">
+</head>
+<body class="reaction-page">
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="logo"><span class="logo-plate" aria-hidden="true">AG</span>Aleksander Goliunov</a>
+    <nav class="main-nav" aria-label="Primary">
+      <a href="/#approach">Approach</a>
+      <a href="/#services">Services</a>
+      <a href="/notes/">Notes</a>
+      <a href="/reaction/">Reaction</a>
+      <a href="/#about">About</a>
+      <a href="/#contact">Contact</a>
+    </nav>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+        <path d="M2 4H16M2 9H16M2 14H16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile">
+    <a href="/#approach">Approach</a>
+    <a href="/#services">Services</a>
+    <a href="/notes/">Notes</a>
+    <a href="/reaction/">Reaction</a>
+    <a href="/#about">About</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <section class="rx-hero">
+    <div class="container">
+      <p class="eyebrow">Reaction test</p>
+      <h1>Five red. <span class="hl">Then green.</span> How fast are you?</h1>
+      <p class="hero-sub rx-sub">Tap the screen — or click, or hit space — the moment the lights turn green. Go early and it's a jump start.</p>
+
+      <div class="rx-challenge" id="rx-challenge" hidden></div>
+
+      <div class="rx-stage" id="rx-stage" role="button" tabindex="0" aria-label="Reaction test. Tap to start, then tap when the lights turn green." data-state="idle">
+        <div class="rx-lights" aria-hidden="true">
+          <span class="rx-light"></span><span class="rx-light"></span><span class="rx-light"></span><span class="rx-light"></span><span class="rx-light"></span>
+        </div>
+        <p class="rx-big" id="rx-big">Tap to start</p>
+        <p class="rx-small" id="rx-small">Wait for green. Don't anticipate.</p>
+      </div>
+
+      <p class="rx-status" id="rx-status" role="status" aria-live="polite"></p>
+
+      <div class="rx-name">
+        <label for="rx-name">Your name on the leaderboard</label>
+        <input id="rx-name" type="text" maxlength="20" autocomplete="nickname" placeholder="e.g. Alex M." enterkeyhint="done">
+      </div>
+
+      <div class="rx-actions" id="rx-actions" hidden>
+        <button type="button" class="btn btn-primary" id="rx-share-story">Share to Stories</button>
+        <button type="button" class="btn btn-secondary" id="rx-challenge-btn">Challenge a friend</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="rx-board-section">
+    <div class="container">
+      <div class="rx-board-head">
+        <h2>Leaderboard</h2>
+        <div class="rx-tabs" role="tablist">
+          <button type="button" role="tab" class="rx-tab" id="rx-tab-week" aria-selected="true">This week</button>
+          <button type="button" role="tab" class="rx-tab" id="rx-tab-all" aria-selected="false">All time</button>
+        </div>
+      </div>
+      <p class="rx-board-note" id="rx-board-note">Weekly board resets every Monday 00:00 UTC. Best time per name.</p>
+      <ol class="rx-board" id="rx-board"></ol>
+    </div>
+  </section>
+
+  <section class="final-cta">
+    <div class="container">
+      <h2>Reaction fades with fatigue long before you feel it</h2>
+      <p>Neck, core, breathing and heat decide how sharp you are late in a stint. A free 15-minute video assessment shows where you stand.</p>
+      <a href="/#book" class="btn btn-primary">Book a free assessment</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>© 2026 Aleksander Goliunov · Movement Therapist — Biotensegrity Specialist · Remote worldwide</p>
+  </div>
+</footer>
+
+<script src="/config.js?v=20261022"></script>
+<script src="/main.js?v=20261022"></script>
+<script src="/reaction.js?v=20261022"></script>
+</body>
+</html>
