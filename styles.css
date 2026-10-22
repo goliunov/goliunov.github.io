@@ -998,8 +998,8 @@ textarea:focus-visible {
   .rx-hero { padding-top: 96px; }
   .rx-hero h1 { font-size: 26px; margin-bottom: 14px; }
   .rx-sub { display: none; }
-  /* phone: the lights fill the width, the stage fills most of the screen */
-  .rx-stage { min-height: min(62vh, 520px); padding: 40px 8px 28px; gap: 26px; }
+  /* phone: the lights fill the width */
+  .rx-stage { min-height: 300px; padding: 32px 8px; }
   .rx-lights { width: 100%; justify-content: center; gap: 6px; padding: 10px; }
   .rx-light { width: min(72px, calc((100vw - 94px) / 5)); height: min(72px, calc((100vw - 94px) / 5)); }
   .rx-big { font-size: min(11vw, 52px); text-align: center; }
