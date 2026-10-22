@@ -61,15 +61,7 @@
   function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 
-  // random player id: a leaderboard name belongs to the first browser that used it
-  var pid = load("rx_pid");
-  if (!/^[a-z0-9]{8,40}$/.test(pid || "")) {
-    pid = "";
-    for (var pi = 0; pi < 20; pi++) pid += "abcdefghijklmnopqrstuvwxyz0123456789".charAt(Math.floor(Math.random() * 36));
-    save("rx_pid", pid);
-  }
-  var TAKEN = "This name is taken. Add a letter or number, e.g. “Alex M.” or “Alex 2”.";
-  function apiUrl(n) { return api + (api.indexOf("?") < 0 ? "?" : "&") + "name=" + encodeURIComponent(n) + "&pid=" + pid; }
+  function apiUrl(n) { return api + (api.indexOf("?") < 0 ? "?" : "&") + "name=" + encodeURIComponent(n); }
 
   function weekStart(now) {
     var d = new Date(now);
@@ -126,7 +118,7 @@
     var problem = nameProblem(n);
     nameError.textContent = problem;
     if (problem) { nameInput.focus(); return; }
-    setPlayer(n); // fetchBoard() checks in the background whether the name is taken
+    setPlayer(n);
     // close the phone keyboard and bring the lights back into view
     nameInput.blur();
     setTimeout(function () {
@@ -135,10 +127,6 @@
       window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
     }, 350);
   });
-  function nameTaken(extra) {
-    askName(false);
-    nameError.textContent = TAKEN + (extra || "");
-  }
   nameInput.addEventListener("input", function () { nameError.textContent = ""; });
   document.getElementById("rx-change-name").addEventListener("click", function () { askName(true); });
 
@@ -280,22 +268,17 @@
 
   function fetchBoard() {
     if (!api) { render(); return; }
-    var asked = playerName;
-    fetch(apiUrl(asked))
+    fetch(apiUrl(playerName))
       .then(function (r) { return r.json(); })
-      .then(function (d) {
-        if (d && d.taken && asked && asked === playerName && state !== "countdown" && state !== "go") nameTaken();
-        if (d && d.week) { board = d; render(); }
-      })
+      .then(function (d) { if (d && d.week) { board = d; render(); } })
       .catch(function () { boardEl.innerHTML = '<li class="rx-empty">Leaderboard unavailable right now.</li>'; });
   }
 
   function submit(ms) {
     if (!api || !playerName) return;
-    fetch(api, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ name: playerName, ms: ms, pid: pid }) })
+    fetch(api, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ name: playerName, ms: ms }) })
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        if (d && d.error === "taken") { nameTaken(" Your time wasn't saved."); return; }
         if (d && d.week) { board = d; lastRank = d.weekRank; render(); }
         if (d && d.ok && d.weekRank) statusEl.textContent += " You're #" + d.weekRank + " this week.";
       })
