@@ -6,12 +6,17 @@
  * GET  ?name=Alex            → { week:[...], all:[...], weekRank, allRank, weekTotal, allTotal }
  * POST {"name":"Alex","ms":213} (Content-Type: text/plain) → same payload after saving
  *
- * To moderate: open the sheet and delete rows (bad names, impossible times).
+ * One row per player (key = lower-case name): all-time best in column C,
+ * this week's best in E with its week start (ms) in F. A new time only
+ * updates the row when it is faster.
+ *
+ * To moderate: open the sheet and delete the player's row.
  */
 var SHEET_NAME = 'Results';
 var MIN_MS = 100;
 var MAX_MS = 1500;
 var TOP_N = 20;
+var HEADER = ['updated', 'name', 'ms', 'key', 'week_ms', 'week_start'];
 
 // ---------- bad-name filter (same copy in tools/reaction_leaderboard.gs) ----------
 var BAD_ANY = ['fuck','fuk','fck','phuck','cunt','nigg','fagg','faggot','shit','bitch','biatch','whore','slut','pussy','bastard',
@@ -45,7 +50,7 @@ function sheet_() {
   var sh = ss.getSheetByName(SHEET_NAME);
   if (!sh) {
     sh = ss.insertSheet(SHEET_NAME);
-    sh.appendRow(['time', 'name', 'ms', 'key']);
+    sh.appendRow(HEADER);
     sh.setFrozenRows(1);
   }
   return sh;
@@ -70,22 +75,25 @@ function weekStart_(now) {
   return d.getTime();
 }
 
-function board_(rows, since) {
-  var best = {};
-  rows.forEach(function (r) {
-    var t = new Date(r[0]).getTime(), name = String(r[1]), ms = Number(r[2]), k = String(r[3] || key_(name));
-    if (!(t >= since) || !(ms >= MIN_MS && ms <= MAX_MS) || !name || badName(name)) return;
-    if (!best[k] || ms < best[k].ms) best[k] = { name: name, ms: ms };
-  });
-  return Object.keys(best).map(function (k) { return best[k]; }).sort(function (a, b) { return a.ms - b.ms; });
+function rows_(sh) {
+  var last = sh.getLastRow();
+  return last > 1 ? sh.getRange(2, 1, last - 1, 6).getValues() : [];
 }
 
-function payload_(name) {
-  var sh = sheet_();
-  var last = sh.getLastRow();
-  var rows = last > 1 ? sh.getRange(2, 1, last - 1, 4).getValues() : [];
-  var ws = weekStart_(Date.now());
-  var week = board_(rows, ws), all = board_(rows, 0);
+function board_(rows, week) {
+  var ws = weekStart_(Date.now()), list = [];
+  rows.forEach(function (r) {
+    var name = String(r[1]);
+    var ms = week ? (Number(r[5]) === ws ? Number(r[4]) : 0) : Number(r[2]);
+    if (!name || badName(name) || !(ms >= MIN_MS && ms <= MAX_MS)) return;
+    list.push({ name: name, ms: ms });
+  });
+  return list.sort(function (a, b) { return a.ms - b.ms; });
+}
+
+function payload_(name, rows) {
+  rows = rows || rows_(sheet_());
+  var week = board_(rows, true), all = board_(rows, false);
   var k = name ? key_(name) : null;
   function rank(list) {
     if (!k) return null;
@@ -97,7 +105,7 @@ function payload_(name) {
     week: week.slice(0, TOP_N), all: all.slice(0, TOP_N),
     weekRank: rank(week), allRank: rank(all),
     weekTotal: week.length, allTotal: all.length,
-    weekStart: ws
+    weekStart: weekStart_(Date.now())
   };
 }
 
@@ -118,10 +126,53 @@ function doPost(e) {
 
   var lock = LockService.getScriptLock();
   lock.waitLock(5000);
-  try { sheet_().appendRow([new Date(), name, ms, key_(name)]); }
-  finally { lock.releaseLock(); }
-  return json_(payload_(name));
+  var rows;
+  try {
+    var sh = sheet_(), k = key_(name), ws = weekStart_(Date.now());
+    rows = rows_(sh);
+    var i = -1;
+    for (var j = 0; j < rows.length; j++) if (String(rows[j][3] || key_(rows[j][1])) === k) { i = j; break; }
+    if (i < 0) {
+      var row = [new Date(), name, ms, k, ms, ws];
+      sh.appendRow(row);
+      rows.push(row);
+    } else {
+      var r = rows[i];
+      var best = Number(r[2]) >= MIN_MS ? Math.min(Number(r[2]), ms) : ms;
+      var weekMs = Number(r[5]) === ws && Number(r[4]) >= MIN_MS ? Math.min(Number(r[4]), ms) : ms;
+      if (best !== Number(r[2]) || weekMs !== Number(r[4]) || Number(r[5]) !== ws) {
+        var upd = [new Date(), name, best, k, weekMs, ws];
+        sh.getRange(i + 2, 1, 1, 6).setValues([upd]);
+        rows[i] = upd;
+      }
+    }
+  } finally { lock.releaseLock(); }
+  return json_(payload_(name, rows));
 }
 
 // Run once from the editor to create the Results sheet and grant access.
 function setup() { sheet_(); }
+
+// Run once from the editor: turns the old one-row-per-attempt sheet
+// (time, name, ms, key) into one row per player with the best times.
+function compact() {
+  var sh = sheet_(), last = sh.getLastRow(), ws = weekStart_(Date.now());
+  var rows = last > 1 ? sh.getRange(2, 1, last - 1, 4).getValues() : [];
+  var by = {}, order = [];
+  rows.forEach(function (r) {
+    var name = String(r[1]), ms = Number(r[2]), k = String(r[3] || key_(name)), t = new Date(r[0]);
+    if (!name || !(ms >= MIN_MS && ms <= MAX_MS)) return;
+    if (!by[k]) { by[k] = { name: name, best: ms, updated: t, week: 0 }; order.push(k); }
+    var p = by[k];
+    if (ms < p.best) { p.best = ms; p.updated = t; }
+    if (t.getTime() >= ws && (!p.week || ms < p.week)) p.week = ms;
+  });
+  var out = order.map(function (k) {
+    var p = by[k];
+    return [p.updated, p.name, p.best, k, p.week || '', p.week ? ws : ''];
+  });
+  if (last > 1) sh.getRange(2, 1, last - 1, Math.max(6, sh.getLastColumn())).clearContent();
+  sh.getRange(1, 1, 1, 6).setValues([HEADER]);
+  if (out.length) sh.getRange(2, 1, out.length, 6).setValues(out);
+  if (last - 1 > out.length) sh.deleteRows(out.length + 2, last - 1 - out.length);
+}
