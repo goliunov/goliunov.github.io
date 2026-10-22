@@ -994,10 +994,6 @@ textarea:focus-visible {
 .rx-who { color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .rx-time { font-family: var(--font-mono); color: var(--text); }
 
-/* home page teaser */
-.rx-teaser-inner { display: grid; gap: 24px; align-items: center; }
-@media (min-width: 760px) { .rx-teaser-inner { grid-template-columns: 1fr auto; } }
-.rx-teaser .rx-lights { justify-self: start; }
 @media (max-width: 759px) {
   .rx-hero { padding-top: 96px; }
   .rx-hero h1 { font-size: 26px; margin-bottom: 14px; }
@@ -1029,3 +1025,53 @@ textarea:focus-visible {
   background: none; border: 0; padding: 6px 4px; margin-left: 4px;
   font: inherit; color: var(--accent); text-decoration: underline; cursor: pointer;
 }
+
+/* back to home */
+.back-home {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-bottom: 18px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.back-home:hover { color: var(--accent); }
+
+/* hero: game button with a green "light" */
+.btn-go { gap: 10px; }
+.btn-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: #2BD46B;
+  box-shadow: 0 0 10px rgba(43, 212, 107, 0.8);
+}
+
+/* game on the home page */
+.rx-home { background: var(--bg-alt); border-bottom: none; }
+.rx-home h2 { margin-bottom: 10px; }
+.rx-home-sub { max-width: 640px; margin-bottom: 22px; }
+.rx-board-home { padding-top: 0; }
+
+/* who made the game */
+.rx-by { font-size: 14px; margin: -6px 0 14px; }
+.rx-by a { color: var(--accent); }
+
+/* offer after a result */
+.rx-offer {
+  margin-top: 20px;
+  padding: 22px 20px;
+  background:
+    repeating-linear-gradient(115deg, transparent 0 26px, rgba(242, 238, 227, 0.05) 26px 28px),
+    linear-gradient(135deg, var(--brg) 0%, var(--brg-deep) 100%);
+  border-left: 4px solid var(--accent);
+}
+.rx-offer p { color: #D3DDD7; margin-bottom: 14px; max-width: 640px; }
+.rx-offer b { color: var(--text); }
+
+/* booking page */
+.book-page { padding-top: 120px; border-bottom: none; }
+@media (min-width: 760px) { .book-page { padding-top: 150px; } }
+.book-page h1 { font-size: clamp(28px, 5vw, 48px); max-width: 820px; }
+.book-page .booking-frame { margin: 24px 0 18px; max-width: none; }

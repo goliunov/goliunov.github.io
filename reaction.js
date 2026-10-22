@@ -22,6 +22,8 @@
   var tabWeek = document.getElementById("rx-tab-week");
   var tabAll = document.getElementById("rx-tab-all");
   var challengeEl = document.getElementById("rx-challenge");
+  var offer = document.getElementById("rx-offer");
+  function showOffer(on) { if (offer) offer.hidden = !on; }
 
   var api = (typeof CONFIG !== "undefined" && CONFIG.reactionApi && !/^\[.*\]$/.test(CONFIG.reactionApi)) ? CONFIG.reactionApi : null;
 
@@ -95,7 +97,7 @@
     actions.hidden = true;
     fetchBoard();
   }
-  function askName() {
+  function askName(focus) {
     playerName = "";
     clearTimers();
     setLights(0);
@@ -103,7 +105,8 @@
     nameForm.hidden = false;
     driverLine.hidden = true;
     actions.hidden = true;
-    nameInput.focus();
+    showOffer(false);
+    if (focus === true) nameInput.focus();
   }
   nameForm.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -115,7 +118,7 @@
     setPlayer(n);
   });
   nameInput.addEventListener("input", function () { nameError.textContent = ""; });
-  document.getElementById("rx-change-name").addEventListener("click", askName);
+  document.getElementById("rx-change-name").addEventListener("click", function () { askName(true); });
 
   // personal bests are kept per name, so a new name starts fresh
   function bestKey(k) { return "rx_" + k + "_" + playerName.toLowerCase(); }
@@ -147,6 +150,7 @@
   function start() {
     clearTimers();
     actions.hidden = true;
+    showOffer(false);
     statusEl.textContent = "";
     setLights(0);
     setState("countdown", "Wait…", "Don't move until green");
@@ -196,6 +200,7 @@
     if (beat) msg.push(ms < beat ? "You beat " + (from || "your friend") + " by " + fmt(beat - ms) + "." : (from || "Your friend") + " is still faster by " + fmt(ms - beat) + ".");
     statusEl.textContent = msg.join(" ");
     actions.hidden = false;
+    showOffer(true);
     if (ms <= MAX_MS && (!weekBest || ms < weekBest)) {
       save(bestKey("week_best"), String(ms));
       submit(ms);
@@ -205,7 +210,7 @@
   function onPress(ev) {
     if (ev.target.closest && ev.target.closest("button, input, a, label")) return;
     if (ev.type === "pointerdown" && ev.button > 0) return;
-    if (state === "locked") { nameError.textContent = "First enter your name, then tap the lights."; nameInput.focus(); return; }
+    if (state === "locked") { nameError.textContent = "First enter your name, then tap the lights."; nameInput.focus({ preventScroll: true }); return; }
     if (state === "idle" || state === "result" || state === "jump") start();
     else if (state === "countdown") jumpStart();
     else if (state === "go") finish(ev);
@@ -343,6 +348,6 @@
 
   var saved = cleanName(load("rx_name"));
   nameInput.value = saved;
-  if (saved && !nameProblem(saved)) setPlayer(saved); else { askName(); fetchBoard(); }
+  if (saved && !nameProblem(saved)) setPlayer(saved); else { askName(false); fetchBoard(); }
   render();
 })();

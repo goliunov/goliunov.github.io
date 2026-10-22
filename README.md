@@ -60,7 +60,7 @@ automatically — nothing broken shows up on the live site.
 
 ## Booking (Google Calendar)
 
-"Book" buttons scroll to an embedded Google Calendar appointment
+All "Book" buttons link to /book/, which embeds the Google Calendar appointment
 schedule ("Free 15-min driver assessment": weekdays 07:00–22:00 Tbilisi,
 booked at least 12 h ahead, Google Meet link created automatically).
 The link lives in `config.js` as `bookingUrl`; availability is edited in
@@ -131,7 +131,7 @@ in `tools/build_notes.py` (the `ARTICLES` list). After editing it run
 `sitemap.xml`. The "Notes from the paddock" block on the home page lists the
 three latest by hand.
 
-## Reaction test (/reaction/)
+## Reaction test (home #reaction and /reaction/)
 
 F1-style start game: five red lights (1 s apart), random 0.2–3 s hold, then
 all green. Code: `reaction/index.html`, `reaction.js`, styles in `styles.css`.

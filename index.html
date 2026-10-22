@@ -47,7 +47,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="styles.css?v=20261022">
+<link rel="stylesheet" href="styles.css?v=20261022e">
 
 <!--
   Analytics is off by default (no cookies, no third-party scripts).
@@ -64,7 +64,7 @@
       <a href="#approach">Approach</a>
       <a href="#services">Services</a>
       <a href="/notes/">Notes</a>
-      <a href="/reaction/">Reaction</a>
+      <a href="#reaction">Reaction</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -78,7 +78,7 @@
     <a href="#approach">Approach</a>
     <a href="#services">Services</a>
     <a href="/notes/">Notes</a>
-    <a href="/reaction/">Reaction</a>
+    <a href="#reaction">Reaction</a>
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
   </nav>
@@ -93,8 +93,9 @@
       <h1>Your car gets a setup sheet every session. <span class="hl">Your body doesn't.</span></h1>
       <p class="hero-sub">I build the physical setup for the driver — the part of the lap time the car can't fix.</p>
       <div class="hero-ctas">
-        <a href="#book" class="btn btn-primary" data-booking>Book a free 15-min assessment</a>
+        <a href="/book/" class="btn btn-primary">Book a free 15-min assessment</a>
         <a href="#services" class="btn btn-secondary">How it works</a>
+        <a href="#reaction" class="btn btn-secondary btn-go"><span class="btn-dot" aria-hidden="true"></span>Check your reaction</a>
       </div>
     </div></div>
     <div class="container">
@@ -242,20 +243,6 @@
     </div>
   </section>
 
-  <!-- Reaction test teaser -->
-  <section class="rx-teaser">
-    <div class="container rx-teaser-inner fade-in">
-      <div>
-        <h2>How fast are you off the line?</h2>
-        <p>Five red lights, then green. Test your reaction, get on this week's leaderboard and challenge your friends.</p>
-        <a href="/reaction/" class="btn btn-primary">Test your reaction</a>
-      </div>
-      <div class="rx-lights" aria-hidden="true">
-        <span class="rx-light red"></span><span class="rx-light red"></span><span class="rx-light red"></span><span class="rx-light red"></span><span class="rx-light green"></span>
-      </div>
-    </div>
-  </section>
-
   <!-- Notes from the paddock (latest 3, links to /notes/) -->
   <section id="notes">
     <div class="container fade-in">
@@ -322,15 +309,63 @@
     </div>
   </section>
 
-  <!-- Final CTA + booking calendar -->
-  <section class="final-cta" id="book">
+  <!-- Final CTA -->
+  <section class="final-cta" id="cta">
     <div class="container fade-in">
       <h2>Easiest way to see if it's worth anything</h2>
-      <p>A free 15-minute video assessment. No commitment, no equipment needed. Pick a time below — the Google Meet link comes to your inbox.</p>
-      <div class="booking-frame" id="booking-frame" hidden>
-        <iframe id="booking-iframe" title="Book a free 15-minute assessment" loading="lazy"></iframe>
+      <p>A free 15-minute video assessment. No commitment, no equipment needed.</p>
+      <a href="/book/" class="btn btn-primary">Book a free assessment</a>
+    </div>
+  </section>
+
+  <!-- Reaction test (same game as /reaction/) -->
+  <section class="rx-home" id="reaction">
+    <div class="container">
+      <h2>How fast are you off the line?</h2>
+      <p class="rx-home-sub">Five red lights, then green. Enter your name, beat this week's leaderboard and challenge your friends.</p>
+      <div class="rx-challenge" id="rx-challenge" hidden></div>
+
+      <div class="rx-stage" id="rx-stage" role="button" tabindex="0" aria-label="Reaction test. Tap to start, then tap when the lights turn green." data-state="locked">
+        <div class="rx-lights" aria-hidden="true">
+          <span class="rx-light"></span><span class="rx-light"></span><span class="rx-light"></span><span class="rx-light"></span><span class="rx-light"></span>
+        </div>
+        <form class="rx-name" id="rx-name-form" novalidate>
+          <label for="rx-name">Your name on the leaderboard</label>
+          <div class="rx-name-row">
+            <input id="rx-name" type="text" maxlength="20" autocomplete="nickname" placeholder="e.g. Alex M." enterkeyhint="go" required>
+            <button type="submit" class="btn btn-primary">Let's go</button>
+          </div>
+          <p class="rx-name-error" id="rx-name-error" role="alert"></p>
+        </form>
+        <p class="rx-driver" id="rx-driver" hidden>Driver: <b id="rx-driver-name"></b> <button type="button" class="rx-link" id="rx-change-name">change</button></p>
+        <p class="rx-big" id="rx-big">Enter your name</p>
+        <p class="rx-small" id="rx-small">Then the lights are yours</p>
       </div>
-      <a href="#contact" class="btn btn-primary" id="booking-fallback">Send a message instead</a>
+
+      <p class="rx-status" id="rx-status" role="status" aria-live="polite"></p>
+
+      <div class="rx-actions" id="rx-actions" hidden>
+        <button type="button" class="btn btn-primary" id="rx-share-story">Share to Stories</button>
+        <button type="button" class="btn btn-secondary" id="rx-challenge-btn">Challenge a friend</button>
+      </div>
+      <div class="rx-offer" id="rx-offer" hidden>
+        <p><b>Want a sharper start?</b> Reaction fades with fatigue, heat and neck and core load long before you feel it — and the physical side of it can be trained. That's what I work on with racing drivers.</p>
+        <a href="/book/" class="btn btn-primary">Book a free 15-min assessment</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="rx-board-section rx-board-home">
+    <div class="container">
+      <div class="rx-board-head">
+        <h2>Leaderboard</h2>
+        <div class="rx-tabs" role="tablist">
+          <button type="button" role="tab" class="rx-tab" id="rx-tab-week" aria-selected="true">This week</button>
+          <button type="button" role="tab" class="rx-tab" id="rx-tab-all" aria-selected="false">All time</button>
+        </div>
+      </div>
+      <p class="rx-board-note" id="rx-board-note">Weekly board resets every Monday 00:00 UTC. Best time per name.</p>
+      <ol class="rx-board" id="rx-board"></ol>
     </div>
   </section>
 
@@ -340,7 +375,7 @@
       <h2>Contact</h2>
       <div class="contact-grid fade-in">
         <div class="contact-links" id="contact-links">
-          <a id="link-booking" href="#book" data-booking>Book a 15-min video call</a>
+          <a id="link-booking" href="/book/">Book a 15-min video call</a>
           <a id="link-email" href="#">Email</a>
           <a id="link-instagram" href="#" target="_blank" rel="noopener">Instagram</a>
           <a id="link-linkedin" href="#" target="_blank" rel="noopener" hidden>LinkedIn</a>
@@ -389,7 +424,8 @@
   </div>
 </footer>
 
-<script src="config.js?v=20261022"></script>
-<script src="main.js?v=20261022"></script>
+<script src="config.js?v=20261022e"></script>
+<script src="main.js?v=20261022e"></script>
+<script src="reaction.js?v=20261022e"></script>
 </body>
 </html>

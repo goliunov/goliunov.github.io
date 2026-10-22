@@ -56,18 +56,12 @@
     }
   }
 
-  // ---------- Booking calendar embedded in the page ----------
+  // ---------- Booking calendar (only on /book/) ----------
   var bookingFrame = document.getElementById("booking-frame");
   var bookingIframe = document.getElementById("booking-iframe");
-  var bookingFallback = document.getElementById("booking-fallback");
   if (!isPlaceholder(CONFIG.bookingUrl) && bookingFrame && bookingIframe) {
     bookingIframe.src = CONFIG.bookingUrl + (CONFIG.bookingUrl.indexOf("?") === -1 ? "?gv=true" : "&gv=true");
     bookingFrame.hidden = false;
-    if (bookingFallback) bookingFallback.className = "btn btn-secondary";
-  } else {
-    // no booking page configured: booking buttons go to the contact form
-    document.querySelectorAll("[data-booking]").forEach(function (a) { a.href = "#contact"; });
-    if (bookingFallback) bookingFallback.textContent = "Book a free assessment";
   }
 
   // ---------- References toggle ----------
