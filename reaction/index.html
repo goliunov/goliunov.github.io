@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=20261022b">
+<link rel="stylesheet" href="/styles.css?v=20261022c">
 </head>
 <body class="reaction-page">
 
@@ -58,20 +58,24 @@
 
       <div class="rx-challenge" id="rx-challenge" hidden></div>
 
-      <div class="rx-stage" id="rx-stage" role="button" tabindex="0" aria-label="Reaction test. Tap to start, then tap when the lights turn green." data-state="idle">
+      <div class="rx-stage" id="rx-stage" role="button" tabindex="0" aria-label="Reaction test. Tap to start, then tap when the lights turn green." data-state="locked">
         <div class="rx-lights" aria-hidden="true">
           <span class="rx-light"></span><span class="rx-light"></span><span class="rx-light"></span><span class="rx-light"></span><span class="rx-light"></span>
         </div>
-        <p class="rx-big" id="rx-big">Tap to start</p>
-        <p class="rx-small" id="rx-small">Wait for green. Don't anticipate.</p>
+        <form class="rx-name" id="rx-name-form" novalidate>
+          <label for="rx-name">Your name on the leaderboard</label>
+          <div class="rx-name-row">
+            <input id="rx-name" type="text" maxlength="20" autocomplete="nickname" placeholder="e.g. Alex M." enterkeyhint="go" required>
+            <button type="submit" class="btn btn-primary">Let's go</button>
+          </div>
+          <p class="rx-name-error" id="rx-name-error" role="alert"></p>
+        </form>
+        <p class="rx-driver" id="rx-driver" hidden>Driver: <b id="rx-driver-name"></b> <button type="button" class="rx-link" id="rx-change-name">change</button></p>
+        <p class="rx-big" id="rx-big">Enter your name</p>
+        <p class="rx-small" id="rx-small">Then the lights are yours</p>
       </div>
 
       <p class="rx-status" id="rx-status" role="status" aria-live="polite"></p>
-
-      <div class="rx-name">
-        <label for="rx-name">Your name on the leaderboard</label>
-        <input id="rx-name" type="text" maxlength="20" autocomplete="nickname" placeholder="e.g. Alex M." enterkeyhint="done">
-      </div>
 
       <div class="rx-actions" id="rx-actions" hidden>
         <button type="button" class="btn btn-primary" id="rx-share-story">Share to Stories</button>
@@ -109,8 +113,8 @@
   </div>
 </footer>
 
-<script src="/config.js?v=20261022b"></script>
-<script src="/main.js?v=20261022b"></script>
-<script src="/reaction.js?v=20261022b"></script>
+<script src="/config.js?v=20261022c"></script>
+<script src="/main.js?v=20261022c"></script>
+<script src="/reaction.js?v=20261022c"></script>
 </body>
 </html>

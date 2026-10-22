@@ -70,16 +70,55 @@
   function fmt(ms) { return (ms / 1000).toFixed(3) + " s"; }
   function esc(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
 
-  nameInput.value = load("rx_name") || "";
-  nameInput.addEventListener("change", function () {
-    nameInput.value = cleanName(nameInput.value);
-    if (badName(nameInput.value)) {
-      statusEl.textContent = "That name isn't allowed on the leaderboard. Please choose another one.";
-      nameInput.value = "";
-    }
-    save("rx_name", nameInput.value);
+  // ---------- step 1: name (required before the lights) ----------
+  var nameForm = document.getElementById("rx-name-form");
+  var nameError = document.getElementById("rx-name-error");
+  var driverLine = document.getElementById("rx-driver");
+  var driverName = document.getElementById("rx-driver-name");
+  var playerName = "";
+
+  function nameProblem(n) {
+    if (n.length < 2) return "Enter at least 2 characters.";
+    if (badName(n)) return "That name isn't allowed on the leaderboard. Please choose another one.";
+    return "";
+  }
+  function setPlayer(n) {
+    playerName = n;
+    save("rx_name", n);
+    driverName.textContent = n;
+    nameForm.hidden = true;
+    driverLine.hidden = false;
+    clearTimers();
+    setLights(0);
+    setState("idle", "Tap to start", "Wait for green. Don't anticipate.");
+    statusEl.textContent = "";
+    actions.hidden = true;
+    fetchBoard();
+  }
+  function askName() {
+    playerName = "";
+    clearTimers();
+    setLights(0);
+    setState("locked", "Enter your name", "Then the lights are yours");
+    nameForm.hidden = false;
+    driverLine.hidden = true;
+    actions.hidden = true;
+    nameInput.focus();
+  }
+  nameForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var n = cleanName(nameInput.value);
+    nameInput.value = n;
+    var problem = nameProblem(n);
+    nameError.textContent = problem;
+    if (problem) { nameInput.focus(); return; }
+    setPlayer(n);
   });
-  nameInput.addEventListener("keydown", function (e) { if (e.key === "Enter") { nameInput.blur(); } });
+  nameInput.addEventListener("input", function () { nameError.textContent = ""; });
+  document.getElementById("rx-change-name").addEventListener("click", askName);
+
+  // personal bests are kept per name, so a new name starts fresh
+  function bestKey(k) { return "rx_" + k + "_" + playerName.toLowerCase(); }
 
   // ---------- challenge link: ?beat=213&from=Alex ----------
   var params = new URLSearchParams(location.search);
@@ -147,18 +186,18 @@
     if (ms < MIN_MS) { jumpStart(); statusEl.textContent = "Under 0.100 s — that's anticipation, not reaction. Counts as a jump start."; return; }
     lastMs = ms;
     setState("result", fmt(ms), "Tap to go again");
-    var best = parseInt(load("rx_best") || "0", 10);
-    var weekBest = parseInt(load("rx_week_best") || "0", 10);
+    var best = parseInt(load(bestKey("best")) || "0", 10);
+    var weekBest = parseInt(load(bestKey("week_best")) || "0", 10);
     var ws = weekStart(Date.now());
-    if (parseInt(load("rx_week") || "0", 10) !== ws) { weekBest = 0; save("rx_week", String(ws)); }
+    if (parseInt(load(bestKey("week")) || "0", 10) !== ws) { weekBest = 0; save(bestKey("week"), String(ws)); }
     var msg = [];
-    if (!best || ms < best) { save("rx_best", String(ms)); msg.push("New personal best!"); }
+    if (!best || ms < best) { save(bestKey("best"), String(ms)); msg.push("New personal best!"); }
     else msg.push("Personal best: " + fmt(best) + ".");
     if (beat) msg.push(ms < beat ? "You beat " + (from || "your friend") + " by " + fmt(beat - ms) + "." : (from || "Your friend") + " is still faster by " + fmt(ms - beat) + ".");
     statusEl.textContent = msg.join(" ");
     actions.hidden = false;
     if (ms <= MAX_MS && (!weekBest || ms < weekBest)) {
-      save("rx_week_best", String(ms));
+      save(bestKey("week_best"), String(ms));
       submit(ms);
     }
   }
@@ -166,14 +205,19 @@
   function onPress(ev) {
     if (ev.target.closest && ev.target.closest("button, input, a, label")) return;
     if (ev.type === "pointerdown" && ev.button > 0) return;
+    if (state === "locked") { nameError.textContent = "First enter your name, then tap the lights."; nameInput.focus(); return; }
     if (state === "idle" || state === "result" || state === "jump") start();
     else if (state === "countdown") jumpStart();
     else if (state === "go") finish(ev);
   }
 
-  stage.addEventListener("pointerdown", function (e) { e.preventDefault(); onPress(e); });
+  stage.addEventListener("pointerdown", function (e) {
+    if (e.target.closest && e.target.closest("form, button, input, a, label")) return; // let the name form work
+    e.preventDefault();
+    onPress(e);
+  });
   document.addEventListener("keydown", function (e) {
-    if (e.target === nameInput) return;
+    if (e.target === nameInput || (e.target.closest && e.target.closest("form, button"))) return;
     if (e.code === "Space" || e.key === " " || e.key === "Enter") {
       if (e.repeat) return;
       e.preventDefault();
@@ -186,7 +230,7 @@
     if (!api) { boardEl.innerHTML = '<li class="rx-empty">Leaderboard is coming soon.</li>'; return; }
     if (!board) { boardEl.innerHTML = '<li class="rx-empty">Loading…</li>'; return; }
     var list = board[period] || [];
-    var me = cleanName(nameInput.value).toLowerCase();
+    var me = playerName.toLowerCase();
     if (!list.length) { boardEl.innerHTML = '<li class="rx-empty">No times yet' + (period === "week" ? " this week" : "") + ". Be the first.</li>"; return; }
     boardEl.innerHTML = list.map(function (r, i) {
       var mine = me && r.name.toLowerCase() === me;
@@ -209,28 +253,15 @@
 
   function fetchBoard() {
     if (!api) { render(); return; }
-    var n = cleanName(nameInput.value);
-    fetch(api + (api.indexOf("?") < 0 ? "?" : "&") + "name=" + encodeURIComponent(n))
+    fetch(api + (api.indexOf("?") < 0 ? "?" : "&") + "name=" + encodeURIComponent(playerName))
       .then(function (r) { return r.json(); })
       .then(function (d) { if (d && d.week) { board = d; render(); } })
       .catch(function () { boardEl.innerHTML = '<li class="rx-empty">Leaderboard unavailable right now.</li>'; });
   }
 
   function submit(ms) {
-    var n = cleanName(nameInput.value);
-    if (!api) return;
-    if (badName(n)) { statusEl.textContent += " That name isn't allowed on the leaderboard — choose another one."; return; }
-    if (n.length < 2) {
-      statusEl.textContent += " Add your name above to post this time.";
-      nameInput.focus();
-      var once = function () {
-        nameInput.removeEventListener("change", once);
-        if (cleanName(nameInput.value).length >= 2) submit(ms);
-      };
-      nameInput.addEventListener("change", once);
-      return;
-    }
-    fetch(api, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ name: n, ms: ms }) })
+    if (!api || !playerName) return;
+    fetch(api, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ name: playerName, ms: ms }) })
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (d && d.week) { board = d; lastRank = d.weekRank; render(); }
@@ -241,7 +272,7 @@
 
   // ---------- sharing ----------
   function challengeUrl() {
-    var n = cleanName(nameInput.value);
+    var n = playerName;
     return SITE + "?beat=" + lastMs + (n ? "&from=" + encodeURIComponent(n) : "");
   }
 
@@ -267,7 +298,7 @@
     g.fillText((lastMs / 1000).toFixed(3), 540, 900);
     g.font = "800 70px Archivo, 'Arial Black', sans-serif";
     g.fillText("SECONDS", 540, 1000);
-    var n = cleanName(nameInput.value);
+    var n = playerName;
     g.fillStyle = "#A9B8AF"; g.font = "500 52px Inter, sans-serif";
     if (n) g.fillText(n, 540, 1130);
     if (lastRank) { g.fillStyle = "#F5C518"; g.font = "800 64px Archivo, 'Arial Black', sans-serif"; g.fillText("#" + lastRank + " THIS WEEK", 540, 1230); }
@@ -310,6 +341,8 @@
     }
   });
 
-  fetchBoard();
+  var saved = cleanName(load("rx_name"));
+  nameInput.value = saved;
+  if (saved && !nameProblem(saved)) setPlayer(saved); else { askName(); fetchBoard(); }
   render();
 })();

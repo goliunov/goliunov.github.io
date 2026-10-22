@@ -998,10 +998,34 @@ textarea:focus-visible {
 .rx-teaser-inner { display: grid; gap: 24px; align-items: center; }
 @media (min-width: 760px) { .rx-teaser-inner { grid-template-columns: 1fr auto; } }
 .rx-teaser .rx-lights { justify-self: start; }
-.rx-name { margin: 20px 0 0; }
 @media (max-width: 759px) {
   .rx-hero { padding-top: 96px; }
   .rx-hero h1 { font-size: 26px; margin-bottom: 14px; }
   .rx-sub { display: none; }
   .rx-stage { min-height: 300px; }
+}
+
+/* name step lives inside the lights stage */
+.rx-stage .rx-name { width: 100%; max-width: 420px; margin: 0; cursor: default; text-align: left; }
+.rx-name-row { display: flex; gap: 8px; }
+.rx-name-row input { flex: 1; min-width: 0; }
+.rx-name-row .btn { flex-shrink: 0; }
+.rx-name-error { min-height: 20px; margin: 6px 0 0; font-size: 13px; color: #FF6A5E; }
+.rx-stage[data-state="locked"] { cursor: default; }
+.rx-stage[data-state="locked"] .rx-big,
+.rx-stage[data-state="locked"] .rx-small { display: none; }
+.rx-driver {
+  position: absolute;
+  top: 10px; left: 12px;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.rx-driver b { color: var(--text); font-weight: 500; }
+.rx-link {
+  background: none; border: 0; padding: 6px 4px; margin-left: 4px;
+  font: inherit; color: var(--accent); text-decoration: underline; cursor: pointer;
 }
