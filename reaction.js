@@ -28,6 +28,33 @@
   var state = "idle", timers = [], t0 = 0, lastMs = null, lastRank = null;
   var board = null, period = "week";
 
+  // ---------- bad-name filter (same copy in tools/reaction_leaderboard.gs) ----------
+  var BAD_ANY = ['fuck','fuk','fck','phuck','cunt','nigg','fagg','faggot','shit','bitch','biatch','whore','slut','pussy','bastard',
+    'asshole','arsehole','dickhead','bollock','twat','wanker','retard','hitler','porn','penis','vagina','jizz','cocksuck','motherf',
+    'dildo','blowjob','handjob','rapist','paedo','pedophil','pedofil','paedophil','nazis'];
+  var BAD_WORD = ['ass','arse','cock','dick','cum','tit','tits','boob','boobs','anal','sex','rape','nazi','kike','spic','chink','coon',
+    'tranny','dyke','fag','homo','wank','piss','crap','hoe','hoes','nonce','prick','knob','scum','negro','pedo','nigga','jew','kkk'];
+  function badName(name) {
+    var leet = { '0': 'o', '1': 'i', '!': 'i', '|': 'i', '3': 'e', '4': 'a', '@': 'a', '5': 's', '$': 's', '7': 't', '+': 't', '8': 'b', '9': 'g', '*': '' };
+    var n = String(name || '').toLowerCase().replace(/[01!|34@5$7+89*]/g, function (c) { return leet[c]; });
+    var col = function (s) { return s.replace(/(.)\1+/g, '$1'); };
+    var joined = n.replace(/[^a-z]/g, ''), joinedC = col(joined);
+    var words = n.replace(/[^a-z]+/g, ' ').trim().split(' ');
+    for (var i = 0; i < BAD_ANY.length; i++) {
+      var b = BAD_ANY[i];
+      if (joined.indexOf(b) >= 0 || (col(b) === b && joinedC.indexOf(b) >= 0)) return true;
+    }
+    var tokens = words.concat([joined]);
+    for (var j = 0; j < BAD_WORD.length; j++) {
+      var w = BAD_WORD[j], wc = col(w);
+      for (var k = 0; k < tokens.length; k++) {
+        var t = tokens[k];
+        if (t === w || (t.length >= w.length && col(t) === wc)) return true;
+      }
+    }
+    return false;
+  }
+
   // ---------- storage (per-viewer conveniences only) ----------
   function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
@@ -44,7 +71,14 @@
   function esc(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
 
   nameInput.value = load("rx_name") || "";
-  nameInput.addEventListener("change", function () { nameInput.value = cleanName(nameInput.value); save("rx_name", nameInput.value); });
+  nameInput.addEventListener("change", function () {
+    nameInput.value = cleanName(nameInput.value);
+    if (badName(nameInput.value)) {
+      statusEl.textContent = "That name isn't allowed on the leaderboard. Please choose another one.";
+      nameInput.value = "";
+    }
+    save("rx_name", nameInput.value);
+  });
   nameInput.addEventListener("keydown", function (e) { if (e.key === "Enter") { nameInput.blur(); } });
 
   // ---------- challenge link: ?beat=213&from=Alex ----------
@@ -185,6 +219,7 @@
   function submit(ms) {
     var n = cleanName(nameInput.value);
     if (!api) return;
+    if (badName(n)) { statusEl.textContent += " That name isn't allowed on the leaderboard — choose another one."; return; }
     if (n.length < 2) {
       statusEl.textContent += " Add your name above to post this time.";
       nameInput.focus();

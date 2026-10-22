@@ -13,6 +13,33 @@ var MIN_MS = 100;
 var MAX_MS = 1500;
 var TOP_N = 20;
 
+// ---------- bad-name filter (same copy in tools/reaction_leaderboard.gs) ----------
+var BAD_ANY = ['fuck','fuk','fck','phuck','cunt','nigg','fagg','faggot','shit','bitch','biatch','whore','slut','pussy','bastard',
+  'asshole','arsehole','dickhead','bollock','twat','wanker','retard','hitler','porn','penis','vagina','jizz','cocksuck','motherf',
+  'dildo','blowjob','handjob','rapist','paedo','pedophil','pedofil','paedophil','nazis'];
+var BAD_WORD = ['ass','arse','cock','dick','cum','tit','tits','boob','boobs','anal','sex','rape','nazi','kike','spic','chink','coon',
+  'tranny','dyke','fag','homo','wank','piss','crap','hoe','hoes','nonce','prick','knob','scum','negro','pedo','nigga','jew','kkk'];
+function badName(name) {
+  var leet = { '0': 'o', '1': 'i', '!': 'i', '|': 'i', '3': 'e', '4': 'a', '@': 'a', '5': 's', '$': 's', '7': 't', '+': 't', '8': 'b', '9': 'g', '*': '' };
+  var n = String(name || '').toLowerCase().replace(/[01!|34@5$7+89*]/g, function (c) { return leet[c]; });
+  var col = function (s) { return s.replace(/(.)\1+/g, '$1'); };
+  var joined = n.replace(/[^a-z]/g, ''), joinedC = col(joined);
+  var words = n.replace(/[^a-z]+/g, ' ').trim().split(' ');
+  for (var i = 0; i < BAD_ANY.length; i++) {
+    var b = BAD_ANY[i];
+    if (joined.indexOf(b) >= 0 || (col(b) === b && joinedC.indexOf(b) >= 0)) return true;
+  }
+  var tokens = words.concat([joined]);
+  for (var j = 0; j < BAD_WORD.length; j++) {
+    var w = BAD_WORD[j], wc = col(w);
+    for (var k = 0; k < tokens.length; k++) {
+      var t = tokens[k];
+      if (t === w || (t.length >= w.length && col(t) === wc)) return true;
+    }
+  }
+  return false;
+}
+
 function sheet_() {
   var ss = SpreadsheetApp.getActive();
   var sh = ss.getSheetByName(SHEET_NAME);
@@ -47,7 +74,7 @@ function board_(rows, since) {
   var best = {};
   rows.forEach(function (r) {
     var t = new Date(r[0]).getTime(), name = String(r[1]), ms = Number(r[2]), k = String(r[3] || key_(name));
-    if (!(t >= since) || !(ms >= MIN_MS && ms <= MAX_MS) || !name) return;
+    if (!(t >= since) || !(ms >= MIN_MS && ms <= MAX_MS) || !name || badName(name)) return;
     if (!best[k] || ms < best[k].ms) best[k] = { name: name, ms: ms };
   });
   return Object.keys(best).map(function (k) { return best[k]; }).sort(function (a, b) { return a.ms - b.ms; });
@@ -82,7 +109,7 @@ function doPost(e) {
   var d;
   try { d = JSON.parse(e.postData.contents); } catch (err) { return json_({ ok: false, error: 'bad_request' }); }
   var name = clean_(d.name), ms = Math.round(Number(d.ms));
-  if (name.length < 2) return json_({ ok: false, error: 'name' });
+  if (name.length < 2 || badName(name)) return json_({ ok: false, error: 'name' });
   if (!(ms >= MIN_MS && ms <= MAX_MS)) return json_({ ok: false, error: 'time' });
 
   var cache = CacheService.getScriptCache(), ck = 'rl_' + key_(name).slice(0, 200);
