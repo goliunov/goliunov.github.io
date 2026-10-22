@@ -21,7 +21,6 @@
   var boardNote = document.getElementById("rx-board-note");
   var tabWeek = document.getElementById("rx-tab-week");
   var tabAll = document.getElementById("rx-tab-all");
-  var challengeEl = document.getElementById("rx-challenge");
   var offer = document.getElementById("rx-offer");
   function showOffer(on) { if (offer) offer.hidden = !on; }
 
@@ -138,10 +137,6 @@
   var beat = parseInt(params.get("beat"), 10);
   var from = cleanName(params.get("from"));
   if (!(beat >= MIN_MS && beat <= MAX_MS)) beat = null;
-  if (beat && challengeEl) {
-    challengeEl.innerHTML = "<b>" + esc(from || "A friend") + "</b> started in <b>" + fmt(beat) + "</b>. Can you beat it?";
-    challengeEl.hidden = false;
-  }
 
   // ---------- game ----------
   function clearTimers() { timers.forEach(clearTimeout); timers = []; }
