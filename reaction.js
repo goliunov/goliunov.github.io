@@ -116,6 +116,13 @@
     nameError.textContent = problem;
     if (problem) { nameInput.focus(); return; }
     setPlayer(n);
+    // close the phone keyboard and bring the lights back into view
+    nameInput.blur();
+    setTimeout(function () {
+      var r = stage.getBoundingClientRect();
+      var top = window.pageYOffset + r.top - Math.max(0, (window.innerHeight - r.height) / 2);
+      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    }, 350);
   });
   nameInput.addEventListener("input", function () { nameError.textContent = ""; });
   document.getElementById("rx-change-name").addEventListener("click", function () { askName(true); });
