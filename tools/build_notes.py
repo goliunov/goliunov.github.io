@@ -421,7 +421,7 @@ def head(title, description, url, extra=""):
 FOOT = f"""
 <footer class="site-footer">
   <div class="container">
-    <p>© 2026 Aleksander Goliunov · Movement Therapist — Biotensegrity Specialist · Remote worldwide</p>
+    <p>© 2026 Aleksander Goliunov · Physical Performance Coach — Biotensegrity Specialist · Remote worldwide</p>
   </div>
 </footer>
 
