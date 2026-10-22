@@ -61,6 +61,16 @@
   function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
 
+  // random player id: a leaderboard name belongs to the first browser that used it
+  var pid = load("rx_pid");
+  if (!/^[a-z0-9]{8,40}$/.test(pid || "")) {
+    pid = "";
+    for (var pi = 0; pi < 20; pi++) pid += "abcdefghijklmnopqrstuvwxyz0123456789".charAt(Math.floor(Math.random() * 36));
+    save("rx_pid", pid);
+  }
+  var TAKEN = "This name is taken. Add a letter or number, e.g. “Alex M.” or “Alex 2”.";
+  function apiUrl(n) { return api + (api.indexOf("?") < 0 ? "?" : "&") + "name=" + encodeURIComponent(n) + "&pid=" + pid; }
+
   function weekStart(now) {
     var d = new Date(now);
     var day = (d.getUTCDay() + 6) % 7;
@@ -106,6 +116,7 @@
     driverLine.hidden = true;
     actions.hidden = true;
     showOffer(false);
+    nameError.textContent = "";
     if (focus === true) nameInput.focus();
   }
   nameForm.addEventListener("submit", function (e) {
@@ -115,7 +126,7 @@
     var problem = nameProblem(n);
     nameError.textContent = problem;
     if (problem) { nameInput.focus(); return; }
-    setPlayer(n);
+    setPlayer(n); // fetchBoard() checks in the background whether the name is taken
     // close the phone keyboard and bring the lights back into view
     nameInput.blur();
     setTimeout(function () {
@@ -124,6 +135,10 @@
       window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
     }, 350);
   });
+  function nameTaken(extra) {
+    askName(false);
+    nameError.textContent = TAKEN + (extra || "");
+  }
   nameInput.addEventListener("input", function () { nameError.textContent = ""; });
   document.getElementById("rx-change-name").addEventListener("click", function () { askName(true); });
 
@@ -265,17 +280,22 @@
 
   function fetchBoard() {
     if (!api) { render(); return; }
-    fetch(api + (api.indexOf("?") < 0 ? "?" : "&") + "name=" + encodeURIComponent(playerName))
+    var asked = playerName;
+    fetch(apiUrl(asked))
       .then(function (r) { return r.json(); })
-      .then(function (d) { if (d && d.week) { board = d; render(); } })
+      .then(function (d) {
+        if (d && d.taken && asked && asked === playerName && state !== "countdown" && state !== "go") nameTaken();
+        if (d && d.week) { board = d; render(); }
+      })
       .catch(function () { boardEl.innerHTML = '<li class="rx-empty">Leaderboard unavailable right now.</li>'; });
   }
 
   function submit(ms) {
     if (!api || !playerName) return;
-    fetch(api, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ name: playerName, ms: ms }) })
+    fetch(api, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ name: playerName, ms: ms, pid: pid }) })
       .then(function (r) { return r.json(); })
       .then(function (d) {
+        if (d && d.error === "taken") { nameTaken(" Your time wasn't saved."); return; }
         if (d && d.week) { board = d; lastRank = d.weekRank; render(); }
         if (d && d.ok && d.weekRank) statusEl.textContent += " You're #" + d.weekRank + " this week.";
       })
@@ -324,6 +344,13 @@
 
   document.getElementById("rx-share-story").addEventListener("click", function () {
     if (lastMs == null) return;
+    // Instagram won't take a link from a web page, so copy it for the Link sticker
+    var link = challengeUrl();
+    try {
+      if (navigator.clipboard) navigator.clipboard.writeText(link).then(function () {
+        flash("Game link copied. In Instagram tap the sticker icon → Link → paste, so friends can play.");
+      }).catch(function () {});
+    } catch (e) {}
     var fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
     fontsReady.then(drawCard).then(function (blob) {
       var file = new File([blob], "reaction-" + lastMs + "ms.png", { type: "image/png" });
@@ -334,7 +361,7 @@
       var a = document.createElement("a");
       a.href = URL.createObjectURL(blob); a.download = file.name;
       document.body.appendChild(a); a.click(); a.remove();
-      flash("Image saved — post it to your Stories and add a link sticker to goliunov.github.io/reaction.");
+      flash("Image saved. Post it to your Stories and add a Link sticker with " + link);
     });
   });
 
