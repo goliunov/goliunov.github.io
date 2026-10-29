@@ -178,7 +178,10 @@
       if (fu >= 3) { f.stage = "Nurture"; f.next_step = addDays(t, 75); }
       else f.next_step = addDays(t, fu === 1 ? 4 : 7);
     } else f.next_step = addDays(t, 2);
-    update(c, f, { kind: "sent", template: k, channel: c._ch || "" });
+    if (c._intent) k = c._intent.key;
+    f.template = k;
+    update(c, f, { kind: "sent", template: k, channel: c._ch || "", note: c._in ? "он: " + c._in.slice(0, 1500) : "" });
+    delete c._in; delete c._intent;
     doneToday[c.id] = "sent"; delete drafts[c.id]; delete picked[c.id];
     toast(f.stage === "Nurture" ? "Три фоллоу-апа без ответа → «Позже», вернётся через 75 дней" : "Отмечено. Следующий шаг " + fmtDate(f.next_step));
     render();
@@ -245,11 +248,13 @@
       return '<button data-tpl="' + t + '" class="' + (t === k ? "on" : "") + '">' + t + "</button>";
     }).join("");
     if (d) {
-      var label = { sent: "отправлено ✓", skip: "пропущен до завтра", no: "больше не писать", audit: "аудит записан ✓" }[d];
+      var label = { sent: "отправлено ✓", skip: "пропущен до завтра", no: "больше не писать", audit: "аудит записан ✓", later: "вернётся через 75 дней" }[d];
       return '<div class="card done" data-id="' + c.id + '"><div class="card-head"><span class="name">' + esc(fullName(c)) + '</span><span class="meta">' + label + "</span></div></div>";
     }
     return '<div class="card' + (c.warm ? " warm" : "") + '" data-id="' + c.id + '">' +
       '<div class="card-head"><div><span class="name" data-open="1">' + esc(fullName(c)) + "</span> " + tags + '<div class="meta">' + meta + "</div></div></div>" +
+      '<div class="todo">' + esc(PitAssist.todo(c, kind, k)) + "</div>" +
+      (kind === "reply" ? assistHtml(c) : "") +
       '<div class="tpl-pick">' + picks + "</div>" +
       '<textarea data-draft="1" rows="5">' + esc(draftFor(c)) + "</textarea>" +
       '<div class="row">' + channelButtons(c) + "</div>" +
@@ -257,6 +262,27 @@
       (kind === "reply" ? '<button class="btn" data-act="audit">Записался на аудит</button>' : '<button class="btn" data-act="replied">Ответил</button>') +
       '<button class="btn ghost" data-act="skip">Завтра</button>' +
       '<button class="btn ghost danger" data-act="no">Не писать</button></div></div>';
+  }
+
+  function assistHtml(c) {
+    var r = c._intent, out = "";
+    if (r) {
+      out = '<div class="intent"><b>' + esc(r.label) + "</b> " + esc(r.why) +
+        (r.stage === "Nurture" ? '<div class="row" style="margin-top:8px"><button class="btn" data-act="later">Не согласен → «Позже» на 75 дней</button></div>' : "") +
+        (r.stage === "Lost" ? '<div class="row" style="margin-top:8px"><button class="btn danger" data-act="no">Отправил → больше не писать</button></div>' : "") +
+        '<div class="muted small" style="margin-top:6px">Ответ ниже уже подставлен. Допишите [скобки] и отправьте.</div></div>';
+    }
+    return '<div class="assist"><textarea data-in="1" rows="2" placeholder="Вставьте, что он написал">' + esc(c._in || "") + "</textarea>" +
+      '<button class="btn" data-act="assist">Подсказать ответ</button>' + out + "</div>";
+  }
+
+  function runAssist(c, text) {
+    c._in = text;
+    var r = PitAssist.classify(text, c);
+    c._intent = r;
+    drafts[c.id] = fill(r.text, c);
+    picked[c.id] = "";
+    render();
   }
 
   function todayLists() {
@@ -471,6 +497,26 @@
     }
   }
 
+  // ---------- call script ----------
+  function renderCall() {
+    var soon = S.contacts.filter(function (c) { return c.stage === "Audit booked"; })
+      .sort(function (a, b) { return (a.next_step || "9") < (b.next_step || "9") ? -1 : 1; }).slice(0, 5);
+    var h = "<h1>Созвон</h1>" +
+      '<p class="muted small">Диагностический созвон 30–45 минут. Он говорит 70% времени. Вы задаёте вопросы и слушаете, цену называете только в шаге «Оффер».</p>';
+    if (soon.length) h += '<p class="small">Записаны на аудит: ' + soon.map(function (c) {
+      return '<a href="#" data-open-id="' + c.id + '">' + esc(fullName(c)) + "</a>" + (c.next_step ? " " + fmtDate(c.next_step) : "");
+    }).join(", ") + "</p>";
+    h += PitAssist.CALL.map(function (s, i) {
+      return '<div class="step"><div class="step-h"><span class="tag y">' + (i + 1) + "</span> <b>" + esc(s.t) + '</b> <span class="muted small">' + s.min + " мин</span></div>" +
+        '<div class="small">' + esc(s.ru) + "</div>" + (s.en ? '<div class="en">' + esc(s.en) + "</div>" : "") + "</div>";
+    }).join("");
+    h += "<h2>Если сомневается</h2>" + PitAssist.OBJECTIONS.map(function (r) {
+      return '<details class="obj"><summary>' + esc(r.label) + '</summary><div class="small muted">' + esc(r.why) + '</div><div class="en">' + esc(r.text.replace(/\{first\}/g, "")) + "</div></details>";
+    }).join("");
+    h += '<div class="note">После созвона откройте карточку гонщика: этап «Созвон прошёл» или «Клиент», впишите его боль и следующий шаг.</div>';
+    $("call").innerHTML = h;
+  }
+
   // ---------- templates ----------
   function renderTpl() {
     $("tpl").innerHTML = "<h1>Шаблоны</h1>" +
@@ -487,6 +533,7 @@
     if (tab === "base") renderBase();
     if (tab === "add" && !$("add-form")) renderAdd();
     if (tab === "stats") renderStats();
+    if (tab === "call") renderCall();
     if (tab === "tpl") renderTpl();
     setSync();
   }
@@ -518,6 +565,15 @@
       if (act === "replied") markReplied(c);
       if (act === "skip") markSkip(c);
       if (act === "no") markNo(c);
+      if (act === "assist") {
+        var txt = card.querySelector("[data-in]").value.trim();
+        if (!txt) { toast("Сначала вставьте его сообщение"); return; }
+        runAssist(c, txt);
+      }
+      if (act === "later") {
+        update(c, { stage: "Nurture", next_step: addDays(today(), 75), last_touch: today() }, { kind: "stage", template: "", note: c._in ? "он: " + c._in.slice(0, 1500) : "не сейчас" });
+        delete c._in; delete c._intent; doneToday[c.id] = "later"; render(); toast("Вернётся в список через 75 дней");
+      }
       if (act === "audit") {
         update(c, { stage: "Audit booked", next_step: addDays(today(), 2) }, { kind: "stage", template: "", note: "" });
         doneToday[c.id] = "audit"; render(); openContact(c.id); toast("Поставьте дату созвона и сохраните");
@@ -526,6 +582,7 @@
   });
   document.addEventListener("input", function (e) {
     if (e.target.matches("[data-draft]")) { var card = e.target.closest(".card"); drafts[card.getAttribute("data-id")] = e.target.value; }
+    if (e.target.matches("[data-in]")) { var cc = byId(e.target.closest(".card").getAttribute("data-id")); if (cc) cc._in = e.target.value; }
     if (e.target.id === "q") renderBase();
   });
   document.addEventListener("click", function (e) {
