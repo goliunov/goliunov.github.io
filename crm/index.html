@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PitCRM</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#08110D">
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="crm.css?v=20261029a">
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <span class="brand"><span class="plate">AG</span>PitCRM</span>
+    <span class="sync" id="sync">…</span>
+  </div>
+  <nav class="tabs" id="tabs" hidden>
+    <button data-tab="today" class="on">Сегодня</button>
+    <button data-tab="base">База</button>
+    <button data-tab="add">Добавить</button>
+    <button data-tab="stats">Цифры</button>
+    <button data-tab="tpl">Шаблоны</button>
+  </nav>
+</header>
+
+<main class="wrap">
+  <section id="login" hidden>
+    <h1>Вход</h1>
+    <p class="muted">Ключ доступа лежит в вашей таблице PitCRM: вкладка <b>Settings</b>, ячейка <b>B2</b>. Вводится один раз на каждом устройстве.</p>
+    <form id="login-form" class="stack">
+      <input id="login-key" type="password" autocomplete="current-password" placeholder="Ключ доступа" required>
+      <button class="btn primary" type="submit">Войти</button>
+      <p class="err" id="login-err"></p>
+    </form>
+  </section>
+
+  <section id="today" class="tab" hidden></section>
+  <section id="base" class="tab" hidden>
+    <input id="q" class="search" type="search" placeholder="Поиск: имя, команда, серия, @instagram">
+    <div class="chips" id="stage-filter"></div>
+    <div id="base-list"></div>
+  </section>
+  <section id="add" class="tab" hidden></section>
+  <section id="stats" class="tab" hidden></section>
+  <section id="tpl" class="tab" hidden></section>
+</main>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet-box" role="dialog" aria-modal="true">
+    <button class="x" id="sheet-x" aria-label="Закрыть">×</button>
+    <div id="sheet-body"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="crm.js?v=20261029a"></script>
+</body>
+</html>
