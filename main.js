@@ -65,6 +65,12 @@
     }
   }
 
+  var linkWhatsapp = document.getElementById("link-whatsapp");
+  if (linkWhatsapp && !isPlaceholder(CONFIG.whatsappUsername) && isPlaceholder(CONFIG.phone)) {
+    linkWhatsapp.innerHTML = "WhatsApp " + CONFIG.whatsappUsername + "<small>search the username in WhatsApp</small>";
+    linkWhatsapp.hidden = false;
+  }
+
   // ---------- Booking calendar (only on /book/) ----------
   var bookingFrame = document.getElementById("booking-frame");
   var bookingIframe = document.getElementById("booking-iframe");

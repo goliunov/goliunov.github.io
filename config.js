@@ -18,6 +18,9 @@ const CONFIG = {
   // Optional. Leave empty to hide. International format, e.g. "+995000000000"
   phone: "",
 
+  // WhatsApp username (people find it via search in WhatsApp; a tap-to-chat link needs the phone above)
+  whatsappUsername: "@goliunov",
+
   // Google Calendar appointment schedule (free 15-min assessment booking page)
   bookingUrl: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ383UxpqKadgN1AaYDzJxQbkdTHE_GL1ytrCJ_kE5Tmq9sQW25Mq96tGyLmtQ8T4IsjPv69hDuQ",
 

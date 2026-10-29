@@ -678,6 +678,16 @@ nav.main-nav a:hover::after { transform: scaleX(1); }
   color: var(--accent);
 }
 .contact-links a:hover { color: var(--accent); padding-left: 6px; }
+.contact-plain {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 56px;
+  font-size: 15px;
+  border-bottom: 1px solid var(--line);
+}
+.contact-plain small { font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); text-align: right; }
 
 form#contact-form { display: flex; flex-direction: column; gap: 16px; }
 .form-row { display: flex; flex-direction: column; gap: 6px; }
