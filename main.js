@@ -74,9 +74,55 @@
   // ---------- Booking calendar (only on /book/) ----------
   var bookingFrame = document.getElementById("booking-frame");
   var bookingIframe = document.getElementById("booking-iframe");
-  if (!isPlaceholder(CONFIG.bookingUrl) && bookingFrame && bookingIframe) {
-    bookingIframe.src = CONFIG.bookingUrl + (CONFIG.bookingUrl.indexOf("?") === -1 ? "?gv=true" : "&gv=true");
-    bookingFrame.hidden = false;
+  function showCalendar() {
+    if (!isPlaceholder(CONFIG.bookingUrl) && bookingFrame && bookingIframe) {
+      if (!bookingIframe.src) bookingIframe.src = CONFIG.bookingUrl + (CONFIG.bookingUrl.indexOf("?") === -1 ? "?gv=true" : "&gv=true");
+      bookingFrame.hidden = false;
+    }
+  }
+
+  // ---------- Audit form (/book/): details → CRM + email, then the calendar ----------
+  var auditForm = document.getElementById("audit-form");
+  var auditCal = document.getElementById("audit-calendar");
+  if (!auditForm) showCalendar();
+  else {
+    var auditStatus = document.getElementById("audit-status");
+    var openCalendar = function () {
+      auditForm.hidden = true;
+      auditCal.hidden = false;
+      showCalendar();
+      auditCal.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    document.getElementById("audit-skip").addEventListener("click", function (e) { e.preventDefault(); openCalendar(); });
+    auditForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var f = auditForm.elements;
+      var miss = !f.first.value.trim() ? f.first : !/^\S+@\S+\.\S+$/.test(f.email.value.trim()) ? f.email : !f.pain.value.trim() ? f.pain : null;
+      if (miss) { auditStatus.textContent = "Please fill in the fields marked *."; miss.focus(); return; }
+      if (!f.consent.checked) { auditStatus.textContent = "Please tick the consent box so I can store your details."; return; }
+      var lead = {};
+      ["first", "last", "email", "whatsapp", "instagram", "segment", "series", "team", "pain", "videos", "website"].forEach(function (k) { lead[k] = f[k].value.trim(); });
+      lead.consent = 1;
+      var sent = [];
+      if (!isPlaceholder(CONFIG.crmApi)) {
+        sent.push(fetch(CONFIG.crmApi, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "lead", lead: lead }) })
+          .then(function (r) { return r.json(); }).then(function (d) { if (!d.ok) throw new Error(d.error); }));
+      }
+      if (!isPlaceholder(CONFIG.formspreeId) && !lead.website) {
+        var fd = new FormData();
+        fd.append("_subject", "Audit request: " + lead.first + " " + lead.last + (lead.series ? " · " + lead.series : ""));
+        Object.keys(lead).forEach(function (k) { if (k !== "website" && lead[k]) fd.append(k, lead[k]); });
+        sent.push(fetch("https://formspree.io/f/" + CONFIG.formspreeId, { method: "POST", body: fd, headers: { Accept: "application/json" } })
+          .then(function (r) { if (!r.ok) throw new Error("formspree"); }));
+      }
+      openCalendar();
+      var thanks = document.getElementById("audit-thanks");
+      thanks.hidden = false;
+      // the calendar opens right away; if both copies of the details fail, say so
+      Promise.all(sent.map(function (p) { return p.then(function () { return true; }, function () { return false; }); })).then(function (res) {
+        if (res.length && res.indexOf(true) < 0) thanks.textContent = "Couldn't send your details — no problem, pick a time below and tell me on the call.";
+      });
+    });
   }
 
   // ---------- References toggle ----------

@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Book a free 15-minute assessment | Aleksander Goliunov</title>
-<meta name="description" content="Book a free 15-minute video assessment with Aleksander Goliunov, physical performance coach for racing drivers. Pick a time, get a Google Meet link.">
+<title>Book a free driver audit | Aleksander Goliunov</title>
+<meta name="description" content="Book a free audit with Aleksander Goliunov, physical performance coach for racing drivers: tell me where your body gives up in the car, then pick a time for a short video call.">
 <meta name="theme-color" content="#08110D">
 <link rel="canonical" href="https://goliunov.github.io/book/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Book a free 15-minute assessment — Aleksander Goliunov">
-<meta property="og:description" content="Physical setup for racing drivers. Pick a time for a free 15-minute video assessment.">
+<meta property="og:title" content="Book a free driver audit — Aleksander Goliunov">
+<meta property="og:description" content="Physical setup for racing drivers. Tell me where your body gives up in the car, then pick a time for a free video call.">
 <meta property="og:image" content="https://goliunov.github.io/assets/og-green.jpg">
 <meta property="og:url" content="https://goliunov.github.io/book/">
 <meta name="twitter:card" content="summary_large_image">
@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=20261029a">
+<link rel="stylesheet" href="/styles.css?v=20261029b">
 </head>
 <body>
 
@@ -53,11 +53,43 @@
   <section class="book-page">
     <div class="container">
       <a href="/" class="back-home">← Back to home</a>
-      <p class="eyebrow">Free 15-min assessment</p>
-      <h1>Easiest way to see if it's worth anything</h1>
-      <p class="hero-sub">A free 15-minute video assessment. No commitment, no equipment needed. Pick a time below — the Google Meet link comes to your inbox.</p>
-      <div class="booking-frame" id="booking-frame" hidden>
-        <iframe id="booking-iframe" title="Book a free 15-minute assessment"></iframe>
+      <p class="eyebrow">Free driver audit</p>
+      <h1>Find out what's limiting you in the car</h1>
+      <p class="hero-sub">Two steps: tell me where your body gives up first, then pick a time for a short video call. You leave with what to fix — whether or not we work together.</p>
+
+      <form class="audit-form" id="audit-form" novalidate>
+        <p class="audit-step"><span>01</span> About you</p>
+        <div class="audit-grid">
+          <div class="form-row"><label for="a-first">First name *</label><input id="a-first" name="first" autocomplete="given-name" required></div>
+          <div class="form-row"><label for="a-last">Last name</label><input id="a-last" name="last" autocomplete="family-name"></div>
+          <div class="form-row"><label for="a-email">Email *</label><input id="a-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="form-row"><label for="a-wa">WhatsApp (with country code)</label><input id="a-wa" name="whatsapp" type="tel" inputmode="tel" autocomplete="tel" placeholder="+44 …"></div>
+          <div class="form-row"><label for="a-ig">Instagram</label><input id="a-ig" name="instagram" placeholder="@yourname"></div>
+          <div class="form-row"><label for="a-seg">I am a</label>
+            <select id="a-seg" name="segment">
+              <option value="pro">Pro / semi-pro driver</option>
+              <option value="junior">Junior driver (or parent)</option>
+              <option value="gentleman">Gentleman driver</option>
+              <option value="team_manager">Team manager / academy</option>
+            </select></div>
+          <div class="form-row"><label for="a-series">Series / class</label><input id="a-series" name="series" placeholder="e.g. ELMS LMP3, GT4, F4"></div>
+          <div class="form-row"><label for="a-team">Team</label><input id="a-team" name="team"></div>
+        </div>
+        <div class="form-row"><label for="a-pain">Where does your body give up first in the car? *</label><textarea id="a-pain" name="pain" required placeholder="Neck after the second stint, lower back, focus at night, heat…"></textarea></div>
+        <div class="form-row"><label for="a-videos">Links to short videos (optional)</label><input id="a-videos" name="videos" placeholder="Google Drive / YouTube / Dropbox links — I'll tell you what to film after you book"></div>
+        <div class="hp" aria-hidden="true"><label for="a-web">Website</label><input id="a-web" name="website" tabindex="-1" autocomplete="off"></div>
+        <label class="consent"><input type="checkbox" name="consent" id="a-consent" required> I agree that Aleksander Goliunov stores these details to prepare my audit and contact me about it. <a href="/privacy/">Privacy policy</a></label>
+        <button type="submit" class="btn btn-primary">Next: pick a time</button>
+        <p class="form-status" id="audit-status" role="status"></p>
+        <a href="#" class="audit-skip" id="audit-skip">Skip and just pick a time</a>
+      </form>
+
+      <div id="audit-calendar" hidden>
+        <p class="audit-step"><span>02</span> Pick a time</p>
+        <p class="audit-thanks" id="audit-thanks" hidden>Thanks — got it. Now pick a time below; the Google Meet link comes to your inbox.</p>
+        <div class="booking-frame" id="booking-frame" hidden>
+          <iframe id="booking-iframe" title="Book a free driver audit"></iframe>
+        </div>
       </div>
       <a href="/#contact" class="btn btn-secondary" id="booking-fallback">Send a message instead</a>
     </div>
@@ -70,7 +102,7 @@
   </div>
 </footer>
 
-<script src="/config.js?v=20261029a"></script>
-<script src="/main.js?v=20261029a"></script>
+<script src="/config.js?v=20261029b"></script>
+<script src="/main.js?v=20261029b"></script>
 </body>
 </html>

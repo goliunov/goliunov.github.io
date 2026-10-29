@@ -107,6 +107,7 @@ function doGet() { return json_({ ok: true, app: 'PitCRM' }); }
 function doPost(e) {
   var d;
   try { d = JSON.parse(e.postData.contents); } catch (err) { return json_({ ok: false, error: 'bad_request' }); }
+  if (d.action === 'lead') return lead_(d);
   var key = PropertiesService.getScriptProperties().getProperty('KEY');
   if (!key || d.key !== key) { Utilities.sleep(800); return json_({ ok: false, error: 'key' }); }
 
@@ -153,6 +154,48 @@ function doPost(e) {
     }
   } finally { lock.releaseLock(); }
   return json_({ ok: false, error: 'action' });
+}
+
+// Public: the audit form on goliunov.github.io/book/ (no key). A known contact
+// (same Instagram, WhatsApp or email) is updated instead of duplicated.
+function lead_(d) {
+  var f = d.lead || {};
+  if (f.website) return json_({ ok: true }); // honeypot field, bots fill it
+  function v(k, n) { return String(f[k] || '').replace(/\s+/g, ' ').trim().slice(0, n || 120); }
+  var first = v('first', 60), email = v('email', 120), wa = v('whatsapp', 40);
+  if (!first || (!email && !wa)) return json_({ ok: false, error: 'fields' });
+  if (!/^1$|^true$/.test(String(f.consent))) return json_({ ok: false, error: 'consent' });
+  var cache = CacheService.getScriptCache(), ck = 'lead_' + (email || wa).toLowerCase().slice(0, 200);
+  if (cache.get(ck)) return json_({ ok: true, repeat: true });
+  cache.put(ck, '1', 60);
+
+  var lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    var ig = igKey_(v('instagram', 80)), digits = wa.replace(/\D/g, ''), found = null;
+    rows_('Contacts', CONTACT_COLS).forEach(function (r) {
+      if (found) return;
+      if ((ig && igKey_(r.instagram) === ig) || (digits.length > 6 && r.whatsapp.replace(/\D/g, '') === digits) ||
+          (email && r.email.toLowerCase() === email.toLowerCase())) found = r;
+    });
+    var note = 'Заявка на аудит ' + today_() + (v('videos', 600) ? ' · видео: ' + v('videos', 600) : '');
+    var c = {
+      first: first, last: v('last', 60), email: email, whatsapp: wa, instagram: v('instagram', 80),
+      series: v('series', 60), team: v('team', 80), segment: v('segment', 20), pain: v('pain', 500),
+      stage: 'Audit booked', next_step: today_(), warm: '1'
+    };
+    if (found) {
+      c.id = found.id;
+      c.notes = (found.notes ? found.notes + '; ' : '') + note;
+      Object.keys(c).forEach(function (k) { if (c[k] === '' && found[k]) delete c[k]; });
+    } else {
+      c.source = 'website';
+      c.notes = note;
+    }
+    var saved = upsert_(c);
+    touch_({ kind: 'stage', template: '', channel: 'website', stage_from: found ? found.stage : '', stage_to: 'Audit booked', note: 'заявка с сайта' }, saved);
+  } finally { lock.releaseLock(); }
+  return json_({ ok: true });
 }
 
 // Run once from the editor.

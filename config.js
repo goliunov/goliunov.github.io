@@ -16,7 +16,7 @@ const CONFIG = {
   linkedinUrl: "https://www.linkedin.com/in/aleksandergoliunov",
 
   // Optional. Leave empty to hide. International format, e.g. "+995000000000"
-  phone: "",
+  phone: "+79856804010",
 
   // WhatsApp username (people find it via search in WhatsApp; a tap-to-chat link needs the phone above)
   whatsappUsername: "@goliunov",
@@ -26,6 +26,9 @@ const CONFIG = {
 
   // Reaction test leaderboard: Google Apps Script web app URL (see README)
   reactionApi: "https://script.google.com/macros/s/AKfycbzCBd3rjOstgjtI0Jlijx2n3cD-iQiVibX1E2KkBKiO8uTdvVyjLisZ6KhU1OJvpq-_/exec",
+
+  // PitCRM Apps Script web app: the audit form on /book/ sends leads here (tools/crm_api.gs)
+  crmApi: "https://script.google.com/macros/s/AKfycbyZI0IWD9-nbiMME6PE5mJDlkyCOETISCDTr_UNhLzBrl_Ns447TVqONhO74XRdWdZR/exec",
 
   // Formspree form id, e.g. "myyaabbc" -> https://formspree.io/f/myyaabbc
   formspreeId: "xkjgqyev",

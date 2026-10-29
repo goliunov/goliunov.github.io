@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = "https://goliunov.github.io"
-ASSET_V = "20261022d"
+ASSET_V = "20261029b"
 IG = "https://www.instagram.com/a.goliunov/p/"
 
 # Each section: (heading or None, [blocks]); a block is a paragraph string or a list (bullets).
@@ -434,8 +434,8 @@ FOOT = f"""
 CTA = """
     <aside class="article-cta">
       <h2>Want this checked on your own body?</h2>
-      <p>A free 15-minute video assessment. No commitment, no equipment needed.</p>
-      <a href="/book/" class="btn btn-primary">Book a free assessment</a>
+      <p>A free audit: tell me where your body gives up, then a short video call. No commitment, no equipment needed.</p>
+      <a href="/book/" class="btn btn-primary">Book a free audit</a>
     </aside>"""
 
 
