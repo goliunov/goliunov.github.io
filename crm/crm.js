@@ -99,7 +99,7 @@
   function setSync() {
     var el = $("sync");
     if (!navigator.onLine) { el.textContent = "нет сети · в очереди " + queue.length; el.className = "sync bad"; return; }
-    if (queue.length) { el.textContent = "сохраняю " + queue.length + "…"; el.className = "sync warn"; return; }
+    if (queue.length) { el.textContent = "сохраняю " + queue.length + "… не закрывайте"; el.className = "sync warn"; return; }
     el.textContent = "сохранено ✓"; el.className = "sync";
   }
 
@@ -109,20 +109,23 @@
   }
 
   var flushing = false, retry = 0;
+  // everything waiting goes in one request: the sheet answers slowly, one wait beats ten
   function flush() {
     setSync();
     if (flushing || !queue.length || !navigator.onLine) return;
     flushing = true;
-    var op = queue[0];
-    call(JSON.parse(JSON.stringify(op))).then(function (d) {
+    var batch = queue.slice(0, 50);
+    var ops = batch.map(function (op) { return { action: op.action, contact: op.contact, touch: op.touch, tmp: op.tmp }; });
+    call(JSON.parse(JSON.stringify({ action: "batch", ops: ops })), 90000).then(function (d) {
       flushing = false;
       if (d && d.error === "key") return logout();
-      if (!d || !d.ok) throw new Error(d && d.error);
-      queue.shift(); retry = 0;
-      if (d.contact) {
-        var c = byId(op.tmp || d.contact.id);
-        if (c) { var tmp = c.id; Object.assign(c, d.contact); retarget(tmp, c.id); }
-      }
+      if (!d || !d.ok || !d.contacts) throw new Error(d && d.error);
+      queue.splice(0, batch.length); retry = 0;
+      batch.forEach(function (op, i) {
+        var saved = d.contacts[i]; if (!saved) return;
+        var c = byId(op.tmp || saved.id);
+        if (c) { var from = c.id; Object.assign(c, saved); retarget(from, c.id); }
+      });
       persist(); flush();
     }).catch(function () {
       flushing = false; retry++;
@@ -593,6 +596,10 @@
   $("sheet").addEventListener("click", function (e) { if (e.target === this) this.hidden = true; });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") $("sheet").hidden = true; });
   window.addEventListener("online", flush);
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) flush(); });
+  window.addEventListener("pageshow", flush);
+  // closing the tab with changes still on their way to the sheet: the browser asks first
+  window.addEventListener("beforeunload", function (e) { if (queue.length) { e.preventDefault(); e.returnValue = ""; } });
   window.addEventListener("offline", setSync);
 
   $("login-form").addEventListener("submit", function (e) {

@@ -129,6 +129,19 @@ function doPost(e) {
       if (d.action === 'log' && d.touch) touch_(d.touch, c);
       return json_({ ok: true, contact: c });
     }
+    // several queued changes from the page in one request (one wait instead of many)
+    if (d.action === 'batch') {
+      var ids = {}, out = [];
+      (d.ops || []).slice(0, 100).forEach(function (op) {
+        var ct = op.contact || {};
+        if (ct.id && ids[ct.id]) ct.id = ids[ct.id];
+        var saved = upsert_(ct);
+        if (op.tmp) ids[op.tmp] = saved.id;
+        if (op.action === 'log' && op.touch) touch_(op.touch, saved);
+        out.push(saved);
+      });
+      return json_({ ok: true, contacts: out });
+    }
     if (d.action === 'import') {
       var have = {}, added = 0, skipped = 0;
       rows_('Contacts', CONTACT_COLS).forEach(function (r) {
